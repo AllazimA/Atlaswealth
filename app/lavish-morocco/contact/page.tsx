@@ -75,13 +75,10 @@ export default function ContactPage() {
     e.preventDefault()
     setSubmitting(true)
     try {
-      await fetch('/lavish-morocco/contact/', {
+      await fetch('/api/contact', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          'form-name': 'concierge-request',
-          ...form,
-        }).toString(),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
       })
     } catch (_) {}
     setSubmitting(false)
