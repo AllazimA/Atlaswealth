@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UAE Financial Calculator</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#F4F6F9;color:#1a1a1a;font-size:14px;line-height:1.5}
+    .app-header{background:#1E3A5F;color:#fff;padding:20px 32px}
+    .app-header h1{font-size:24px;font-weight:700;letter-spacing:-.3px}
+    .app-header p{font-size:13px;opacity:.75;margin-top:4px}
+    .tab-nav{background:#fff;border-bottom:1px solid #E5E7EB;padding:12px 32px;display:flex;align-items:center}
+    .tab-pill-wrap{display:inline-flex;background:#F3F4F6;border-radius:10px;padding:4px;gap:4px}
+    .tab-btn{padding:9px 18px;border:none;background:none;cursor:pointer;font-size:13px;color:#6B7280;border-radius:8px;font-weight:500;transition:all .15s;white-space:nowrap}
+    .tab-btn.active{background:#1E3A5F;color:#fff;font-weight:600}
+    .container{max-width:1280px;margin:0 auto;padding:24px 28px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+    .calc-layout{display:grid;grid-template-columns:38% 1fr;gap:24px;align-items:start}
+    .left-col{position:sticky;top:24px;align-self:start;display:flex;flex-direction:column;gap:20px;max-height:calc(100vh - 48px);overflow-y:auto;overflow-x:hidden;scrollbar-width:none}
+    .left-col::-webkit-scrollbar{display:none}
+    .right-col{display:flex;flex-direction:column;gap:24px}
+    .card{background:#fff;border-radius:12px;padding:20px 22px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+    .card-title{font-size:16px;font-weight:700;color:#1E3A5F;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #F3F4F6;display:flex;align-items:center;gap:8px}
+    .card-title::before{content:'';display:inline-block;width:3px;height:16px;background:#1E3A5F;border-radius:2px;flex-shrink:0}
+    .form-group{margin-bottom:14px}
+    .form-label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+    .form-input{width:100%;height:44px;padding:0 12px;border:1.5px solid #D1D5DB;border-radius:8px;font-size:14px;color:#111827;transition:border-color .15s,box-shadow .15s;background:#fff}
+    .form-input:focus{outline:none;border-color:#1E3A5F;box-shadow:0 0 0 3px rgba(30,58,95,.12)}
+    .form-select{width:100%;height:44px;padding:0 12px;border:1.5px solid #D1D5DB;border-radius:8px;font-size:14px;color:#111827;background:#fff;cursor:pointer}
+    .form-select:focus{outline:none;border-color:#1E3A5F;box-shadow:0 0 0 3px rgba(30,58,95,.12)}
+    .input-hint{font-size:12px;color:#6B7280;margin-top:4px;line-height:1.4}
+    .input-hint.err{color:#991B1B}
+    .slider-row{display:flex;align-items:center;gap:12px}
+    .slider{flex:1;accent-color:#1E3A5F}
+    .slider-val{font-size:14px;font-weight:700;color:#1E3A5F;min-width:48px;text-align:right}
+    .toggle-group{display:flex;background:#F3F4F6;border-radius:8px;padding:3px;gap:3px}
+    .toggle-btn{flex:1;padding:8px 6px;border:none;background:none;cursor:pointer;font-size:13px;color:#6B7280;border-radius:6px;transition:all .15s;font-weight:500;white-space:nowrap}
+    .toggle-btn.active{background:#1E3A5F;color:#fff;font-weight:600}
+    .badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:10px;font-size:11px;font-weight:700;letter-spacing:.3px;white-space:nowrap}
+    .badge-g{background:#D1FAE5;color:#065F46}
+    .badge-a{background:#FEF3C7;color:#92400E}
+    .badge-r{background:#FEE2E2;color:#991B1B}
+    .badge-b{background:#DBEAFE;color:#1E40AF}
+    .compliance-row{display:flex;justify-content:space-between;align-items:center;padding:0 12px;height:48px;border-radius:6px}
+    .compliance-row:nth-child(even){background:#F9FAFB}
+    .compliance-label{font-size:13px;color:#374151;font-weight:500}
+    .compliance-val{font-size:13px;font-weight:600;color:#1E3A5F;margin-right:8px}
+    .metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;background:#F8FAFF;border:1px solid #E0E7FF;border-radius:10px;padding:16px}
+    .metric-item{display:flex;flex-direction:column;gap:4px}
+    .metric-label{font-size:12px;color:#6B7280;font-weight:500}
+    .metric-val{font-size:22px;font-weight:700;color:#1E3A5F;line-height:1.1}
+    .summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+    .s-item{background:#F8FAFF;border-radius:8px;padding:12px 14px;border:1px solid #E0E7FF}
+    .s-label{font-size:12px;color:#6B7280;margin-bottom:3px;font-weight:500}
+    .s-val{font-size:16px;font-weight:700;color:#1E3A5F}
+    .cost-table{width:100%;border-collapse:collapse;font-size:13px}
+    .cost-table th{text-align:left;padding:8px 12px;background:#F9FAFB;font-weight:600;color:#374151;font-size:12px;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #E5E7EB}
+    .cost-table th:last-child{text-align:right}
+    .cost-table td{padding:10px 12px;border-bottom:1px solid #F3F4F6}
+    .cost-table td:last-child{text-align:right;font-weight:500}
+    .cost-table tr:nth-child(odd) td{background:#FAFAFA}
+    .cost-table .tr-total td{background:#1E3A5F!important;color:#fff!important;font-weight:700;border-bottom:none}
+    .cost-table .tr-total td:first-child{border-radius:0 0 0 8px}
+    .cost-table .tr-total td:last-child{border-radius:0 0 8px 0;text-align:right!important}
+    .cost-table .tr-est td{color:#6B7280!important;font-style:italic;background:transparent!important}
+    .amort-wrap{overflow-y:auto;max-height:380px;border:1px solid #E5E7EB;border-radius:8px}
+    .amort-table{width:100%;border-collapse:collapse;font-size:12px}
+    .amort-table th{position:sticky;top:0;background:#1E3A5F;color:#fff;padding:10px 12px;text-align:right;font-weight:500;white-space:nowrap}
+    .amort-table th:first-child{text-align:center}
+    .amort-table td{padding:7px 12px;text-align:right;border-bottom:1px solid #F3F4F6}
+    .amort-table td:first-child{text-align:center;color:#6B7280}
+    .amort-table .bal-col{color:#1E3A5F;font-weight:600}
+    .amort-table tr:hover{background:#F8FAFF}
+    .chart-wrap{position:relative;height:240px}
+    .chart-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px}
+    .chart-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#374151}
+    .leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+    .disclaimer{background:#FFFBEB;border-left:3px solid #F59E0B;padding:10px 14px;font-size:12px;color:#78350F;margin-top:20px;border-radius:0 6px 6px 0;line-height:1.5}
+    .blocked{background:#FEE2E2;border:1px solid #FECACA;border-radius:10px;padding:20px;text-align:center;color:#991B1B}
+    .blocked-title{font-size:15px;font-weight:700;margin-bottom:7px}
+    .alert-r{background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;padding:12px 14px;color:#991B1B;margin-top:12px;font-size:13px}
+    .alert-a{background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;padding:12px 14px;color:#92400E;margin-top:12px;font-size:13px}
+    .info-box{background:#EFF6FF;border-radius:6px;padding:10px 13px;font-size:12px;color:#1E40AF;margin-top:12px;line-height:1.5}
+    .rate-shock{width:100%;border-collapse:collapse;font-size:13px}
+    .rate-shock th{text-align:right;padding:8px 12px;background:#F9FAFB;font-weight:600;font-size:12px;border-bottom:1px solid #E5E7EB}
+    .rate-shock th:first-child{text-align:left}
+    .rate-shock td{padding:8px 12px;text-align:right;border-bottom:1px solid #F3F4F6}
+    .rate-shock td:first-child{text-align:left;font-weight:600}
+    .dbr-gauge-wrap{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+    .dbr-rows{flex:1;min-width:240px}
+    .dbr-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F3F4F6;font-size:14px}
+    .dbr-row.total{font-weight:700;border-bottom:none;margin-top:6px;padding-top:10px;border-top:2px solid #E5E7EB;font-size:15px}
+    .settle-cards{display:flex;gap:14px;flex-wrap:wrap}
+    .settle-card{flex:1;min-width:220px;border-radius:8px;padding:14px 16px}
+    .settle-card-buyer{background:#F0FDF4;border:1.5px solid #86EFAC}
+    .settle-card-bank{background:#EFF6FF;border:1.5px solid #93C5FD}
+    .settle-tag{display:inline-block;padding:2px 9px;border-radius:10px;font-size:11px;font-weight:700;letter-spacing:.3px;margin-bottom:10px}
+    .settle-tag-buyer{background:#DCFCE7;color:#166534}
+    .settle-tag-bank{background:#DBEAFE;color:#1E40AF}
+    .settle-table{width:100%;border-collapse:collapse;font-size:13px}
+    .settle-table td{padding:5px 4px;border-bottom:1px solid rgba(0,0,0,.04);vertical-align:top}
+    .settle-table td:last-child{text-align:right;white-space:nowrap;font-weight:600}
+    .settle-table .settle-total td{font-weight:700;border-top:2px solid rgba(0,0,0,.1);border-bottom:none;padding-top:8px}
+    .settle-est{margin-top:8px;padding:7px 10px;background:#FEF3C7;border-radius:6px;font-size:12px;color:#92400E;line-height:1.4}
+    .settle-callout{margin-top:6px;font-size:12px;color:#6B7280;font-style:italic}
+    .settle-callout strong{color:#1a1a1a;font-style:normal}
+    .settle-note{margin-top:8px;padding:8px 10px;background:#FFF7ED;border-radius:6px;font-size:12px;color:#78350F;line-height:1.5}
+    .funding-bar-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;margin-top:8px}
+    .funding-bar-legend span{display:flex;align-items:center;gap:5px}
+    .btn-export{background:#1E3A5F;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;box-shadow:0 2px 6px rgba(30,58,95,.25);transition:background .15s}
+    .btn-export:hover{background:#162d4a}
+    @media(max-width:900px){.calc-layout{grid-template-columns:1fr}.left-col{position:static}.container{padding:14px 16px}.metric-grid{grid-template-columns:1fr 1fr}.settle-cards{flex-direction:column}}
+    @media(max-width:600px){.grid-2{grid-template-columns:1fr}.metric-grid{grid-template-columns:1fr}.summary-grid{grid-template-columns:1fr 1fr}.tab-btn{padding:8px 10px;font-size:12px}}
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef, useMemo } = React;
+
+/* ─── MATH UTILITIES ─────────────────────────────────────────────────────── */
+
+function pmt(rate, n, pv) {
+  if (Math.abs(rate) < 1e-12) return pv / n;
+  return (pv * rate * Math.pow(1 + rate, n)) / (Math.pow(1 + rate, n) - 1);
+}
+
+function irr(cashflows, guess = 0.005) {
+  let r = guess;
+  for (let i = 0; i < 300; i++) {
+    let f = 0, df = 0;
+    for (let t = 0; t < cashflows.length; t++) {
+      const d = Math.pow(1 + r, t);
+      f  += cashflows[t] / d;
+      df -= t * cashflows[t] / (d * (1 + r));
+    }
+    if (Math.abs(df) < 1e-18) break;
+    const r2 = r - f / df;
+    if (Math.abs(r2 - r) < 1e-12) { r = r2; break; }
+    r = r2 < -0.9999 ? -0.9999 : r2;
+  }
+  return r;
+}
+
+const fmtAED  = v => 'AED ' + Math.round(isNaN(v) ? 0 : v).toLocaleString('en-US');
+const fmtPct  = v => (isNaN(v) ? 0 : v).toFixed(2) + '%';
+const num     = v => { const n = parseFloat(String(v).replace(/,/g,'')); return isNaN(n) ? 0 : n; };
+
+function maxLTV(type, use, price) {
+  if (use === 'inv') return 0.65;
+  return type === 'exp'
+    ? (price <= 5000000 ? 0.80 : 0.65)
+    : (price <= 5000000 ? 0.85 : 0.70);
+}
+
+/* ─── MORTGAGE AMORTIZATION ──────────────────────────────────────────────── */
+
+function mortgageSchedule(principal, annualRate, months, propVal) {
+  const mr = annualRate / 100 / 12;
+  const pay = pmt(mr, months, principal);
+  let bal = principal, cumInt = 0, yrBal = principal;
+  const rows = [];
+  for (let m = 1; m <= months; m++) {
+    if (m > 1 && (m - 1) % 12 === 0) yrBal = bal;
+    const lifeIns = (yrBal * 0.001) / 12;          // 0.10% p.a. declining
+    const propIns = (propVal * 0.0005) / 12;        // 0.05% p.a. flat
+    const interest = bal * mr;
+    const prin = Math.min(pay - interest, bal);
+    bal = Math.max(0, bal - prin);
+    cumInt += interest;
+    rows.push({ m, pay, prin, interest, lifeIns, propIns, cumInt, bal });
+  }
+  return { rows, pay };
+}
+
+function mortgageAPR(loan, rows, fee) {
+  const cf = [-(loan - fee), ...rows.map(r => r.pay)];
+  return (Math.pow(1 + irr(cf), 12) - 1) * 100;
+}
+
+/* ─── LOAN AMORTIZATION ──────────────────────────────────────────────────── */
+
+function loanSchedule(principal, annualReducing, months, lifeIns) {
+  const mr = annualReducing / 100 / 12;
+  const pay = pmt(mr, months, principal);
+  let bal = principal, yrBal = principal;
+  const rows = [];
+  for (let m = 1; m <= months; m++) {
+    if (m > 1 && (m - 1) % 12 === 0) yrBal = bal;
+    const ins = lifeIns ? (yrBal * 0.0008) / 12 : 0;  // 0.08% p.a.
+    const interest = bal * mr;
+    const prin = Math.min(pay - interest, bal);
+    bal = Math.max(0, bal - prin);
+    rows.push({ m, pay, prin, interest, ins, bal });
+  }
+  return { rows, pay };
+}
+
+function loanAPR(loan, rows, fee) {
+  const cf = [-(loan - fee), ...rows.map(r => r.pay)];
+  return (Math.pow(1 + irr(cf), 12) - 1) * 100;
+}
+
+// Flat → reducing via IRR (approx as NR seed)
+function flatToReducing(flat, n, loan) {
+  const flatPay = loan * (1 + flat / 100) / n;
+  const seed = (2 * n * (flat / 100)) / (n + 1) / 12;
+  const cf = [- loan, ...Array(n).fill(flatPay)];
+  return irr(cf, seed) * 12 * 100;
+}
+
+function reducingToFlat(r, n) {
+  return (r / 100 * (n + 1)) / (2 * n) * 100;
+}
+
+/* ─── COMPONENTS ─────────────────────────────────────────────────────────── */
+
+const Badge = ({ s, t }) => <span className={`badge badge-${s}`}>{t}</span>;
+
+function LineBarChart({ rows, type }) {
+  const ref = useRef(); const ch = useRef();
+  useEffect(() => {
+    if (!ref.current || !rows.length) return;
+    ch.current?.destroy();
+    const step = Math.max(1, Math.floor(rows.length / 72));
+    const sr = rows.filter((_, i) => i % step === 0);
+    const ctx = ref.current.getContext('2d');
+    if (type === 'stacked') {
+      ch.current = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: sr.map(r => `M${r.m}`),
+          datasets: [
+            { label: 'Principal', data: sr.map(r => Math.round(r.prin)), backgroundColor: '#1E3A5F' },
+            { label: 'Interest',  data: sr.map(r => Math.round(r.interest)), backgroundColor: '#93C5FD' }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false,
+          scales: { x: { stacked: true, ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 12 }, grid: { color: '#F3F4F6' } }, y: { stacked: true, grid: { color: '#F3F4F6' } } },
+          plugins: { legend: { display: false } } }
+      });
+    } else {
+      ch.current = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: sr.map(r => `M${r.m}`),
+          datasets: [{ label: 'Outstanding Balance', data: sr.map(r => Math.round(r.bal)),
+            borderColor: '#1E3A5F', backgroundColor: 'rgba(30,58,95,.07)', fill: true, tension: 0.3, pointRadius: 0 }]
+        },
+        options: { responsive: true, maintainAspectRatio: false,
+          scales: { y: { beginAtZero: true, grid: { color: '#F3F4F6' } }, x: { ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 12 }, grid: { color: '#F3F4F6' } } },
+          plugins: { legend: { display: false } } }
+      });
+    }
+    return () => ch.current?.destroy();
+  }, [rows, type]);
+  return <canvas ref={ref} />;
+}
+
+function GaugeSVG({ dbr }) {
+  const clamped = Math.min(Math.max(dbr, 0), 100);
+  const color = dbr > 50 ? '#ef5350' : dbr > 40 ? '#ff9800' : '#43a047';
+  const W = 200, H = 115, cx = W / 2, cy = H - 18, R = 75;
+
+  const arc = (pct) => {
+    const theta = (pct / 100) * Math.PI;
+    return { x: cx - R * Math.cos(theta), y: cy - R * Math.sin(theta) };
+  };
+
+  const segments = [
+    { pct: 40, col: '#43a047' },
+    { pct: 10, col: '#ff9800' },
+    { pct: 50, col: '#ef5350' },
+  ];
+
+  const buildArc = (start, end, col) => {
+    const s = arc(start), e = arc(end);
+    const large = (end - start) > 50 ? 1 : 0;
+    return <path key={col + start} d={`M${s.x},${s.y} A${R},${R} 0 ${large} 1 ${e.x},${e.y}`}
+      fill="none" stroke={col} strokeWidth="12" strokeLinecap="butt" />;
+  };
+
+  const needleAngle = (clamped / 100) * 180 - 180; // -180 to 0 degrees
+  const nr = R - 8;
+  const nx = cx + nr * Math.cos((needleAngle * Math.PI) / 180);
+  const ny = cy + nr * Math.sin((needleAngle * Math.PI) / 180);
+
+  return (
+    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
+      {/* background track */}
+      <path d={`M${cx - R},${cy} A${R},${R} 0 0 1 ${cx + R},${cy}`}
+        fill="none" stroke="#e0e0e0" strokeWidth="12" />
+      {/* coloured segments */}
+      {buildArc(0, 40, '#43a047')}
+      {buildArc(40, 50, '#ff9800')}
+      {buildArc(50, 100, '#ef5350')}
+      {/* needle */}
+      <line x1={cx} y1={cy} x2={nx} y2={ny} stroke="#1a1a1a" strokeWidth="2.5" strokeLinecap="round" />
+      <circle cx={cx} cy={cy} r="5" fill="#1a1a1a" />
+      {/* labels */}
+      <text x={cx - R - 4} y={cy + 14} fontSize="10" fill="#888" textAnchor="end">0%</text>
+      <text x={cx + R + 4} y={cy + 14} fontSize="10" fill="#888" textAnchor="start">100%</text>
+      <text x={cx} y={cy - R - 6} fontSize="10" fill="#888" textAnchor="middle">50%</text>
+      {/* DBR value */}
+      <text x={cx} y={cy - 14} fontSize="22" fontWeight="700" fill={color} textAnchor="middle">{dbr.toFixed(1)}%</text>
+      <text x={cx} y={cy + 2} fontSize="10" fill="#666" textAnchor="middle">Combined DBR</text>
+    </svg>
+  );
+}
+
+const Disclaimer = () => (
+  <div className="disclaimer">
+    These calculations are indicative only. Actual mortgage and loan terms, rates, fees, and insurance costs vary by lender. This tool does not constitute financial advice.
+  </div>
+);
+
+/* ─── FUNDING BAR CHART ──────────────────────────────────────────────────── */
+
+function FundingBarChart({ dp, fees, loan }) {
+  const ref = useRef(); const ch = useRef();
+  useEffect(() => {
+    if (!ref.current) return;
+    ch.current?.destroy();
+    const ctx = ref.current.getContext('2d');
+    ch.current = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [''],
+        datasets: [
+          { label: 'Down Payment',       data: [Math.round(dp)],   backgroundColor: '#059669' },
+          { label: 'Buyer Upfront Fees', data: [Math.round(fees)], backgroundColor: '#F59E0B' },
+          { label: 'Bank Loan',          data: [Math.round(loan)], backgroundColor: '#1E3A5F' },
+        ]
+      },
+      options: {
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        scales: { x: { stacked: true, display: false }, y: { stacked: true, display: false } },
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: c => `${c.dataset.label}: ${fmtAED(c.raw)}` } }
+        }
+      }
+    });
+    return () => ch.current?.destroy();
+  }, [dp, fees, loan]);
+  return <canvas ref={ref} />;
+}
+
+/* ─── SETTLEMENT BREAKDOWN ───────────────────────────────────────────────── */
+
+function SettlementBreakdown({ c }) {
+  const { price, dp, loan, dld4, dldMort, feeAED, maxL } = c;
+  const TITLE_DEED = 520;
+  const buyerFees     = dld4 + dldMort + feeAED + TITLE_DEED;
+  const hardTotal     = dp + buyerFees;
+  const buyerPct      = price > 0 ? hardTotal / price * 100 : 0;
+  const bankPct       = price > 0 ? loan / price * 100 : 0;
+  const minDPPct      = 100 - maxL;
+
+  return (
+    <div className="card">
+      <div className="card-title">Transaction Settlement Breakdown</div>
+
+      <div className="settle-cards">
+        {/* ── Card 1: Buyer pays day one ── */}
+        <div className="settle-card settle-card-buyer">
+          <span className="settle-tag settle-tag-buyer">BUYER PAYS — DAY ONE</span>
+          <table className="settle-table">
+            <tbody>
+              <tr>
+                <td>Down Payment</td>
+                <td style={{fontSize:'.72rem',color:'#6b7a8d',padding:'5px 6px'}}>Min {fmtPct(minDPPct)} of price</td>
+                <td style={{fontWeight:600}}>{fmtAED(dp)}</td>
+              </tr>
+              <tr>
+                <td>DLD Transfer Fee (4.00%)</td>
+                <td style={{fontSize:'.72rem',color:'#6b7a8d',padding:'5px 6px'}}>Payable to DLD at transfer</td>
+                <td style={{fontWeight:600}}>{fmtAED(dld4)}</td>
+              </tr>
+              <tr>
+                <td>DLD Mortgage Registration</td>
+                <td style={{fontSize:'.72rem',color:'#6b7a8d',padding:'5px 6px'}}>0.25% of loan + AED 290</td>
+                <td style={{fontWeight:600}}>{fmtAED(dldMort)}</td>
+              </tr>
+              <tr>
+                <td>Bank Processing Fee</td>
+                <td style={{fontSize:'.72rem',color:'#6b7a8d',padding:'5px 6px'}}>Payable at application</td>
+                <td style={{fontWeight:600}}>{feeAED > 0 ? fmtAED(feeAED) : <span style={{color:'#888'}}>AED 0 (not entered)</span>}</td>
+              </tr>
+              <tr>
+                <td>Title Deed Issuance Fee</td>
+                <td style={{fontSize:'.72rem',color:'#6b7a8d',padding:'5px 6px'}}>Fixed DLD admin fee</td>
+                <td style={{fontWeight:600}}>AED 520</td>
+              </tr>
+              <tr className="settle-total">
+                <td colSpan={2} style={{color:'#1b5e20'}}>Total Buyer Upfront (confirmed)</td>
+                <td style={{color:'#1b5e20'}}>{fmtAED(hardTotal)}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div className="settle-est">
+            <strong>+ Estimated additional costs: AED 7,500 – 13,500</strong><br/>
+            Property valuation AED 2,500–3,500 &nbsp;+&nbsp; Conveyancing / NOC AED 5,000–10,000
+          </div>
+          <div className="settle-callout">
+            As % of property price: <strong>{fmtPct(buyerPct)}</strong> (excl. estimates)
+          </div>
+        </div>
+
+        {/* ── Card 2: Bank disburses ── */}
+        <div className="settle-card settle-card-bank">
+          <span className="settle-tag settle-tag-bank">BANK DISBURSES</span>
+          <table className="settle-table">
+            <tbody>
+              <tr>
+                <td>Mortgage Loan Disbursed</td>
+                <td style={{fontSize:'.72rem',color:'#6b7a8d',padding:'5px 6px'}}>Released to seller / developer</td>
+                <td style={{fontWeight:600}}>{fmtAED(loan)}</td>
+              </tr>
+              <tr className="settle-total">
+                <td colSpan={2} style={{color:'#0d47a1'}}>Total Bank Contribution</td>
+                <td style={{color:'#0d47a1'}}>{fmtAED(loan)}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div className="settle-callout" style={{marginTop:10}}>
+            As % of property price: <strong>{fmtPct(bankPct)}</strong> (= LTV)
+          </div>
+          <div className="settle-note">
+            The bank disburses the loan amount directly to the seller or developer. The buyer is responsible for all upfront fees independently of the mortgage facility.
+          </div>
+        </div>
+      </div>
+
+      {/* ── Funding bar ── */}
+      <div style={{marginTop:18}}>
+        <div style={{fontWeight:600,fontSize:'.84rem',color:'#0d2137',marginBottom:8}}>
+          How the {fmtAED(price)} purchase is funded
+        </div>
+        <div style={{height:52}}>
+          <FundingBarChart dp={dp} fees={buyerFees} loan={loan} />
+        </div>
+        <div className="funding-bar-legend">
+          <span><span className="leg-dot" style={{background:'#059669'}}></span>Down Payment: {fmtAED(dp)} ({price>0?(dp/price*100).toFixed(1):'0'}%)</span>
+          <span><span className="leg-dot" style={{background:'#F59E0B'}}></span>Buyer Fees: {fmtAED(buyerFees)} ({price>0?(buyerFees/price*100).toFixed(1):'0'}%)</span>
+          <span><span className="leg-dot" style={{background:'#1E3A5F'}}></span>Bank Loan: {fmtAED(loan)} ({price>0?(loan/price*100).toFixed(1):'0'}%)</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── REPORT UTILITIES ───────────────────────────────────────────────────── */
+
+function reportStyles() {
+  return `
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f2f5;color:#1a1a1a;font-size:13px;line-height:1.5}
+    .page{max-width:940px;margin:0 auto;background:#fff;box-shadow:0 2px 24px rgba(0,0,0,.12)}
+    .rpt-header{background:linear-gradient(135deg,#0d2137 0%,#1565c0 100%);color:#fff;padding:32px 40px;position:relative;overflow:hidden}
+    .rpt-header::before{content:'';position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;border:48px solid rgba(255,255,255,.06)}
+    .rpt-header::after{content:'';position:absolute;right:80px;bottom:-30px;width:120px;height:120px;border-radius:50%;border:24px solid rgba(255,255,255,.04)}
+    .rpt-h1{font-size:1.65rem;font-weight:700;letter-spacing:-.4px}
+    .rpt-sub{font-size:.8rem;opacity:.72;margin-top:5px}
+    .rpt-meta{margin-top:20px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .rpt-meta-item .lbl{font-size:.65rem;opacity:.65;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+    .rpt-meta-item .val{font-size:.92rem;font-weight:600}
+    .ref-tag{position:absolute;top:28px;right:36px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);border-radius:6px;padding:6px 14px;font-size:.72rem;font-family:monospace;letter-spacing:.5px}
+    .divider{height:5px;background:linear-gradient(90deg,#0d2137,#0d6efd 45%,#43a047)}
+    .sec{padding:26px 40px;border-bottom:1px solid #eceef1}
+    .sec:last-child{border-bottom:none}
+    .sec-title{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#7a8899;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .sec-title::after{content:'';flex:1;height:1px;background:#eceef1}
+    .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .info-card{background:#f7f9fc;border-radius:7px;padding:13px 15px;border-left:3px solid #0d6efd}
+    .info-card .lbl{font-size:.67rem;color:#7a8899;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+    .info-card .val{font-size:.98rem;font-weight:700;color:#0d2137}
+    .info-card .note{font-size:.68rem;color:#9aa5b4;margin-top:2px}
+    .kpi{border-radius:8px;padding:13px 15px;color:#fff}
+    .kpi .lbl{font-size:.63rem;opacity:.75;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+    .kpi .val{font-size:1.05rem;font-weight:700}
+    .kpi .sub{font-size:.65rem;opacity:.65;margin-top:2px}
+    .compliance-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .cp{border-radius:8px;padding:14px 15px;text-align:center}
+    .cp .lbl{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;opacity:.7}
+    .cp .val{font-size:1.4rem;font-weight:700;line-height:1}
+    .cp .note{font-size:.67rem;margin-top:5px;opacity:.7}
+    .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.65rem;font-weight:700;letter-spacing:.4px}
+    .bg{background:#e8f5e9;color:#1b5e20}.ba{background:#fff3e0;color:#e65100}.br{background:#ffebee;color:#b71c1c}.bb{background:#e3f2fd;color:#0d47a1}
+    .settle-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid #f0f0f0;font-size:.82rem}
+    .settle-row:last-child{border-bottom:none}
+    .settle-row .item{color:#374151}
+    .settle-row .note{font-size:.68rem;color:#9aa5b4;margin:0 8px}
+    .settle-row .amt{font-weight:600;white-space:nowrap;color:#0d2137}
+    .settle-total-row{display:flex;justify-content:space-between;padding:8px 0 0;margin-top:4px;border-top:2px solid #ccc;font-weight:700;font-size:.88rem}
+    .tbl{width:100%;border-collapse:collapse;font-size:.8rem}
+    .tbl th{background:#0d2137;color:#fff;padding:7px 10px;text-align:right;font-weight:500;white-space:nowrap}
+    .tbl th:first-child,.tbl th.l{text-align:left}
+    .tbl td{padding:6px 10px;text-align:right;border-bottom:1px solid #f0f2f5}
+    .tbl td:first-child,.tbl td.l{text-align:left}
+    .tbl .yr td{background:#f0f6ff;font-weight:600}
+    .tbl tr:hover td{background:#fafbfc}
+    .cost-tbl{width:100%;border-collapse:collapse;font-size:.83rem}
+    .cost-tbl td{padding:6px 0;border-bottom:1px solid #f0f2f5;vertical-align:top}
+    .cost-tbl td:last-child{text-align:right;font-weight:600;white-space:nowrap}
+    .cost-tbl .tot td{border-top:2px solid #0d2137;border-bottom:none;font-weight:700;color:#0d2137;padding-top:9px;font-size:.88rem}
+    .shock-tbl{width:100%;border-collapse:collapse;font-size:.82rem}
+    .shock-tbl th{padding:7px 10px;background:#f7f9fc;text-align:right;font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.3px}
+    .shock-tbl th:first-child{text-align:left}
+    .shock-tbl td{padding:7px 10px;text-align:right;border-bottom:1px solid #f0f2f5}
+    .shock-tbl td:first-child{text-align:left;font-weight:600}
+    .shock-tbl tr:first-child td{background:#f0f9ff;font-weight:600}
+    .yr-tbl th{background:#1a3a5c;color:#fff;padding:7px 10px;text-align:right;font-weight:500}
+    .yr-tbl th:first-child{text-align:center}
+    .yr-tbl td{padding:5px 10px;text-align:right;border-bottom:1px solid #f0f2f5}
+    .yr-tbl td:first-child{text-align:center;color:#7a8899;font-weight:600}
+    .yr-tbl tr:nth-child(5n) td{background:#f7f9fc}
+    .full-tbl{width:100%;border-collapse:collapse;font-size:.73rem}
+    .full-tbl th{position:sticky;top:0;background:#0d2137;color:#fff;padding:7px 9px;text-align:right;font-weight:500;white-space:nowrap}
+    .full-tbl th:first-child{text-align:center}
+    .full-tbl td{padding:4px 9px;text-align:right;border-bottom:1px solid #f5f5f5}
+    .full-tbl td:first-child{text-align:center;color:#7a8899}
+    .full-tbl tr:nth-child(12n) td{background:#f0f6ff;font-weight:600}
+    .full-tbl tr:last-child td{background:#e8f5e9;font-weight:700}
+    .dbr-bar{height:14px;border-radius:7px;overflow:hidden;display:flex;margin:10px 0}
+    .disc{background:#fffde7;border-left:4px solid #f9a825;padding:13px 17px;font-size:.72rem;color:#5d4037;line-height:1.6;border-radius:0 5px 5px 0}
+    .print-bar{padding:18px 40px;border-top:1px solid #eee;display:flex;gap:10px;justify-content:flex-end}
+    .btn-print{background:#0d2137;color:#fff;border:none;padding:10px 24px;border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:600}
+    .btn-close{background:#f0f2f5;color:#374151;border:1px solid #d1d5db;padding:10px 20px;border-radius:6px;cursor:pointer;font-size:.85rem}
+    @media print{body{background:#fff}.page{box-shadow:none;max-width:100%}.print-bar{display:none}.full-wrap{max-height:none!important;overflow:visible!important}}
+  `;
+}
+
+function buildYears(rows) {
+  const out = [];
+  for (let y = 0; y < Math.ceil(rows.length / 12); y++) {
+    const yr = rows.slice(y * 12, Math.min((y + 1) * 12, rows.length));
+    const openBal = y === 0 ? (rows[0].bal + rows[0].prin) : rows[y * 12 - 1].bal;
+    out.push({
+      year: y + 1,
+      openBal,
+      prin:    yr.reduce((a, r) => a + r.prin, 0),
+      interest:yr.reduce((a, r) => a + r.interest, 0),
+      lifeIns: yr.reduce((a, r) => a + (r.lifeIns || 0), 0),
+      ins:     yr.reduce((a, r) => a + (r.ins || 0), 0),
+      closeBal:yr[yr.length - 1].bal,
+    });
+  }
+  return out;
+}
+
+function amortSVG(years, isLoan) {
+  const maxPay = Math.max(...years.map(y => y.prin + y.interest));
+  const bW = Math.max(14, Math.min(28, Math.floor(720 / years.length)));
+  const H  = 140;
+  const W  = years.length * bW;
+  const bars = years.map((y, i) => {
+    const iH = ((y.interest / maxPay) * H).toFixed(1);
+    const pH = ((y.prin / maxPay) * H).toFixed(1);
+    const x  = i * bW + 1;
+    const iy = H - +iH - +pH;
+    const py = H - +pH;
+    return `<rect x="${x}" y="${iy}" width="${bW - 2}" height="${iH}" fill="#90caf9"/>` +
+           `<rect x="${x}" y="${py}" width="${bW - 2}" height="${pH}" fill="#0d2137"/>`;
+  }).join('');
+  const labels = years
+    .filter((_, i) => i === 0 || (i + 1) % 5 === 0 || i === years.length - 1)
+    .map(y => { const i = y.year - 1; return `<text x="${i * bW + bW / 2}" y="${H + 14}" font-size="8.5" text-anchor="middle" fill="#888">Y${y.year}</text>`; })
+    .join('');
+  return `<svg width="${W}" height="${H + 22}" style="max-width:100%;display:block">
+    ${bars}${labels}
+    <rect x="0" y="2" width="10" height="10" fill="#90caf9"/>
+    <text x="13" y="11" font-size="8" fill="#777">Interest</text>
+    <rect x="55" y="2" width="10" height="10" fill="#0d2137"/>
+    <text x="68" y="11" font-size="8" fill="#777">Principal</text>
+  </svg>`;
+}
+
+function fundingBarHTML(dp, fees, loan) {
+  const total = dp + fees + loan;
+  const dpP  = (dp   / total * 100).toFixed(1);
+  const feP  = (fees / total * 100).toFixed(1);
+  const lnP  = (loan / total * 100).toFixed(1);
+  const seg = (w, col, label) =>
+    `<div style="width:${w}%;background:${col};display:flex;align-items:center;justify-content:center;font-size:${+w < 8 ? '0' : '10'}px;color:#fff;font-weight:700;overflow:hidden">${label}</div>`;
+  return `<div style="display:flex;height:34px;border-radius:5px;overflow:hidden;width:100%;box-shadow:0 1px 3px rgba(0,0,0,.15)">
+    ${seg(dpP, '#43a047', dpP + '%')}
+    ${seg(feP, '#ff9800', feP + '%')}
+    ${seg(lnP, '#0d6efd', lnP + '%')}
+  </div>`;
+}
+
+function dbrBarHTML(dbr) {
+  const fill = Math.min(dbr, 100);
+  const col  = dbr > 50 ? '#ef5350' : dbr > 40 ? '#ff9800' : '#43a047';
+  return `<div style="background:#e0e0e0;border-radius:7px;height:14px;overflow:hidden;margin:8px 0">
+    <div style="width:${fill}%;background:${col};height:100%;border-radius:7px;transition:width .3s"></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:.67rem;color:#9aa5b4"><span>0%</span><span style="color:${col};font-weight:700">${dbr.toFixed(2)}%</span><span>100%</span></div>
+  <div style="display:flex;gap:0;height:6px;border-radius:3px;overflow:hidden;margin-top:6px">
+    <div style="width:40%;background:#43a047"></div>
+    <div style="width:10%;background:#ff9800"></div>
+    <div style="width:50%;background:#ef5350"></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:.62rem;color:#9aa5b4;margin-top:2px"><span>0%</span><span>40%</span><span>50%</span><span>100%</span></div>`;
+}
+
+function openMortgageReport(c, s) {
+  const now    = new Date();
+  const dStr   = now.toLocaleDateString('en-AE', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  const tStr   = now.toLocaleTimeString('en-AE', { hour:'2-digit', minute:'2-digit' });
+  const matDate= new Date(now.getFullYear() + num(s.tenor), now.getMonth(), now.getDate())
+                   .toLocaleDateString('en-AE', { month:'long', year:'numeric' });
+  const refNo  = 'MC-' + Date.now().toString(36).toUpperCase().slice(-8);
+  const DEED   = 520;
+  const buyerFees = c.dld4 + c.dldMort + c.feeAED + DEED;
+  const hardTotal = c.dp + buyerFees;
+  const dbrCol    = c.dbr > 50 ? '#b71c1c' : c.dbr > 40 ? '#e65100' : '#2e7d32';
+  const years     = buildYears(c.rows);
+
+  const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>
+<title>Mortgage Report ${refNo}</title>
+<style>${reportStyles()}</style></head><body><div class="page">
+
+<div class="rpt-header">
+  <div class="ref-tag">Ref: ${refNo}</div>
+  <div class="rpt-h1">Mortgage Analysis Report</div>
+  <div class="rpt-sub">UAE Financial Calculator &nbsp;·&nbsp; CBUAE-Compliant Indicative Assessment</div>
+  <div class="rpt-meta">
+    <div class="rpt-meta-item"><div class="lbl">Report Date</div><div class="val">${dStr}</div></div>
+    <div class="rpt-meta-item"><div class="lbl">Time (UAE)</div><div class="val">${tStr}</div></div>
+    <div class="rpt-meta-item"><div class="lbl">Applicant</div><div class="val">${s.appType === 'exp' ? 'Expat' : 'UAE National'}</div></div>
+    <div class="rpt-meta-item"><div class="lbl">Property Use</div><div class="val">${s.propUse === 'primary' ? 'Primary Residence' : 'Investment / 2nd'}</div></div>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- OVERVIEW -->
+<div class="sec">
+  <div class="sec-title">Property &amp; Loan Overview</div>
+  <div class="g3">
+    <div class="info-card" style="border-color:#0d2137">
+      <div class="lbl">Purchase Price</div><div class="val">${fmtAED(c.price)}</div>
+      <div class="note">User-entered</div>
+    </div>
+    <div class="info-card" style="border-color:#546e7a">
+      <div class="lbl">Bank Valuation</div><div class="val">${fmtAED(num(s.val))}</div>
+      <div class="note">LTV base: ${fmtAED(Math.min(c.price, num(s.val)))}</div>
+    </div>
+    <div class="info-card" style="border-color:#1b5e20">
+      <div class="lbl">Down Payment</div><div class="val">${fmtAED(c.dp)}</div>
+      <div class="note">${fmtPct(c.dp / c.price * 100)} of purchase price</div>
+    </div>
+    <div class="info-card" style="border-color:#0d6efd">
+      <div class="lbl">Loan Amount</div><div class="val">${fmtAED(c.loan)}</div>
+      <div class="note">LTV: ${fmtPct(c.ltv)} (max ${fmtPct(c.maxL)})</div>
+    </div>
+    <div class="info-card" style="border-color:#6a1b9a">
+      <div class="lbl">Tenor</div><div class="val">${num(s.tenor)} years · ${c.months} months</div>
+      <div class="note">Maturity: ${matDate}</div>
+    </div>
+    <div class="info-card" style="border-color:#e65100">
+      <div class="lbl">Interest Rate</div><div class="val">${fmtPct(c.nomRate)}</div>
+      <div class="note">${s.rateType === 'fixed' ? 'Fixed for full term' : `Variable — EIBOR ${fmtPct(num(s.eibor))} + ${fmtPct(num(s.margin))} margin · Reset: ${s.eiborReset}`}</div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPLIANCE -->
+<div class="sec">
+  <div class="sec-title">Compliance Dashboard</div>
+  <div class="compliance-strip">
+    <div class="cp" style="background:${c.ltvOK ? '#e8f5e9' : '#ffebee'};border:2px solid ${c.ltvOK ? '#a5d6a7' : '#ef9a9a'}">
+      <div class="lbl">LTV Ratio</div>
+      <div class="val" style="color:${c.ltvOK ? '#1b5e20' : '#b71c1c'}">${fmtPct(c.ltv)}</div>
+      <div class="note">Max ${fmtPct(c.maxL)} &nbsp;<span class="badge ${c.ltvOK ? 'bg' : 'br'}">${c.ltvOK ? 'PASS' : 'BREACH'}</span></div>
+    </div>
+    <div class="cp" style="background:${c.dbr > 50 ? '#ffebee' : c.dbr > 40 ? '#fff3e0' : '#e8f5e9'};border:2px solid ${c.dbr > 50 ? '#ef9a9a' : c.dbr > 40 ? '#ffcc80' : '#a5d6a7'}">
+      <div class="lbl">Debt Burden Ratio</div>
+      <div class="val" style="color:${dbrCol}">${fmtPct(c.dbr)}</div>
+      <div class="note">50% hard cap &nbsp;<span class="badge ${c.dbr > 50 ? 'br' : c.dbr > 40 ? 'ba' : 'bg'}">${c.dbr > 50 ? 'BREACH' : c.dbr > 40 ? 'CAUTION' : 'PASS'}</span></div>
+    </div>
+    <div class="cp" style="background:${s.rateType === 'variable' ? '#fff3e0' : '#e3f2fd'};border:2px solid ${s.rateType === 'variable' ? '#ffcc80' : '#90caf9'}">
+      <div class="lbl">Rate Type</div>
+      <div class="val" style="color:#0d2137;font-size:1.1rem">${s.rateType === 'fixed' ? 'Fixed' : 'Variable'}</div>
+      <div class="note">${s.rateType === 'variable' ? `EIBOR-linked · ${s.eiborReset} reset` : 'Rate locked for full term'}</div>
+    </div>
+    <div class="cp" style="background:#e3f2fd;border:2px solid #90caf9">
+      <div class="lbl">APR (Reducing Bal.)</div>
+      <div class="val" style="color:#0d47a1">${fmtPct(c.apr)}</div>
+      <div class="note">Nominal: ${fmtPct(c.nomRate)} &nbsp;<span class="badge bb">IRR METHOD</span></div>
+    </div>
+  </div>
+  <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;font-size:.72rem;color:#546e7a;background:#f7f9fc;padding:9px 13px;border-radius:6px">
+    <span><strong>Early Settlement:</strong> min(1% outstanding, AED 10,000)</span> &nbsp;·&nbsp;
+    <span><strong>Life Insurance:</strong> 0.10% p.a. declining balance</span> &nbsp;·&nbsp;
+    <span><strong>Property Insurance:</strong> 0.05% p.a. flat</span>
+  </div>
+</div>
+
+<!-- INCOME & DBR -->
+<div class="sec">
+  <div class="sec-title">Income &amp; Debt Burden Analysis</div>
+  <div class="g4" style="margin-bottom:14px">
+    <div class="kpi" style="background:#0d2137"><div class="lbl">Gross Monthly Income</div><div class="val">${fmtAED(num(s.income))}</div></div>
+    <div class="kpi" style="background:#37474f"><div class="lbl">Existing Obligations</div><div class="val">${fmtAED(num(s.existing))}</div></div>
+    <div class="kpi" style="background:#1565c0"><div class="lbl">New Monthly All-In</div><div class="val">${fmtAED(c.allIn)}</div><div class="sub">P+I + Ins.</div></div>
+    <div class="kpi" style="background:${c.dbr > 50 ? '#b71c1c' : c.dbr > 40 ? '#e65100' : '#2e7d32'}"><div class="lbl">Combined DBR</div><div class="val">${fmtPct(c.dbr)}</div></div>
+  </div>
+  ${dbrBarHTML(c.dbr)}
+  <div style="margin-top:14px;background:#f7f9fc;border-radius:7px;padding:13px 15px;font-size:.81rem">
+    <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #eee"><span>Existing monthly obligations</span><strong>${fmtAED(num(s.existing))}</strong></div>
+    <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #eee"><span>New mortgage P+I payment</span><strong>${fmtAED(c.pay)}</strong></div>
+    <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #eee"><span>Life insurance (month 1)</span><strong>${fmtAED(c.rows[0].lifeIns)}</strong></div>
+    <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:2px solid #0d2137"><span>Property insurance (monthly)</span><strong>${fmtAED(c.rows[0].propIns)}</strong></div>
+    <div style="display:flex;justify-content:space-between;padding:7px 0 0;font-weight:700;font-size:.88rem"><span>Total monthly obligations</span><strong style="color:${dbrCol}">${fmtAED(num(s.existing) + c.allIn)}</strong></div>
+  </div>
+</div>
+
+<!-- DAY ONE SETTLEMENT -->
+<div class="sec">
+  <div class="sec-title">Transaction Settlement — Day One Cash Flow</div>
+  <div class="g2">
+    <div style="background:#f0f9f0;border:2px solid #a5d6a7;border-radius:8px;padding:16px 18px">
+      <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1b5e20;margin-bottom:12px">Buyer Pays — Day One</div>
+      <div class="settle-row"><span class="item">Down Payment</span><span class="note">${fmtPct(c.dp/c.price*100)} of price · min ${fmtPct(100-c.maxL)}%</span><span class="amt">${fmtAED(c.dp)}</span></div>
+      <div class="settle-row"><span class="item">DLD Transfer Fee (4.00%)</span><span class="note">Payable to DLD at transfer</span><span class="amt">${fmtAED(c.dld4)}</span></div>
+      <div class="settle-row"><span class="item">DLD Mortgage Registration</span><span class="note">0.25% of loan + AED 290</span><span class="amt">${fmtAED(c.dldMort)}</span></div>
+      <div class="settle-row"><span class="item">Bank Processing Fee</span><span class="note">Payable at application</span><span class="amt">${c.feeAED > 0 ? fmtAED(c.feeAED) : 'AED 0'}</span></div>
+      <div class="settle-row"><span class="item">Title Deed Issuance Fee</span><span class="note">Fixed DLD admin charge</span><span class="amt">AED 520</span></div>
+      <div class="settle-total-row"><span style="color:#1b5e20">Total Buyer Upfront (confirmed)</span><span style="color:#1b5e20">${fmtAED(hardTotal)}</span></div>
+      <div style="margin-top:9px;padding:7px 10px;background:#fff3e0;border-radius:5px;font-size:.72rem;color:#bf360c;line-height:1.5">
+        <strong>+ Est. AED 7,500–13,500</strong> &nbsp; Property valuation (AED 2,500–3,500) + Conveyancing/NOC (AED 5,000–10,000)
+      </div>
+      <div style="margin-top:6px;font-size:.71rem;color:#546e7a;font-style:italic">${fmtPct(hardTotal/c.price*100)} of property price (excl. estimates)</div>
+    </div>
+    <div style="background:#e8f4fd;border:2px solid #90caf9;border-radius:8px;padding:16px 18px">
+      <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#0d47a1;margin-bottom:12px">Bank Disburses</div>
+      <div class="settle-row"><span class="item">Mortgage Loan</span><span class="note">Released to seller/developer</span><span class="amt">${fmtAED(c.loan)}</span></div>
+      <div class="settle-total-row"><span style="color:#0d47a1">Total Bank Contribution</span><span style="color:#0d47a1">${fmtAED(c.loan)}</span></div>
+      <div style="margin-top:10px;font-size:.71rem;color:#546e7a;font-style:italic">${fmtPct(c.ltv)} of property price (= LTV)</div>
+      <div style="margin-top:14px;padding:10px 12px;background:#fff8e1;border-radius:5px;font-size:.73rem;color:#5d4037;line-height:1.5">
+        The bank disburses the loan amount directly to the seller or developer. The buyer is responsible for all upfront fees independently of the mortgage facility.
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:18px">
+    <div style="font-weight:600;font-size:.82rem;color:#0d2137;margin-bottom:10px">How the ${fmtAED(c.price)} purchase is funded</div>
+    ${fundingBarHTML(c.dp, buyerFees, c.loan)}
+    <div style="display:flex;gap:18px;margin-top:9px;font-size:.73rem;flex-wrap:wrap">
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#43a047;display:inline-block"></span>Down Payment: ${fmtAED(c.dp)} (${(c.dp/c.price*100).toFixed(1)}%)</span>
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#ff9800;display:inline-block"></span>Buyer Fees: ${fmtAED(buyerFees)} (${(buyerFees/c.price*100).toFixed(1)}%)</span>
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#0d6efd;display:inline-block"></span>Bank Loan: ${fmtAED(c.loan)} (${(c.loan/c.price*100).toFixed(1)}%)</span>
+    </div>
+  </div>
+</div>
+
+<!-- FINANCIAL SUMMARY -->
+<div class="sec">
+  <div class="sec-title">Financial Summary</div>
+  <div class="g4" style="margin-bottom:16px">
+    <div class="kpi" style="background:#0d2137"><div class="lbl">Monthly P+I</div><div class="val">${fmtAED(c.pay)}</div><div class="sub">Principal + Interest</div></div>
+    <div class="kpi" style="background:#1565c0"><div class="lbl">Monthly All-In</div><div class="val">${fmtAED(c.allIn)}</div><div class="sub">Incl. insurance</div></div>
+    <div class="kpi" style="background:#6a1b9a"><div class="lbl">APR (Reducing Bal.)</div><div class="val">${fmtPct(c.apr)}</div><div class="sub">IRR on full cash flows</div></div>
+    <div class="kpi" style="background:#b71c1c"><div class="lbl">Total Interest</div><div class="val">${fmtAED(c.totInt)}</div><div class="sub">Over ${num(s.tenor)} years</div></div>
+  </div>
+  <div class="g2">
+    <table class="cost-tbl">
+      <tr><td>Loan Principal</td><td>${fmtAED(c.loan)}</td></tr>
+      <tr><td>Total Interest</td><td>${fmtAED(c.totInt)}</td></tr>
+      <tr><td>Life Insurance (declining)</td><td>${fmtAED(c.totLife)}</td></tr>
+      <tr><td>Property Insurance (flat)</td><td>${fmtAED(c.totProp)}</td></tr>
+      <tr class="tot"><td>Total Mortgage Cost</td><td>${fmtAED(c.loan + c.totInt + c.totLife + c.totProp)}</td></tr>
+    </table>
+    <table class="cost-tbl">
+      <tr><td>DLD Transfer Fee (4.00%)</td><td>${fmtAED(c.dld4)}</td></tr>
+      <tr><td>DLD Mortgage Registration</td><td>${fmtAED(c.dldMort)}</td></tr>
+      <tr><td>Bank Processing Fee</td><td>${fmtAED(c.feeAED)}</td></tr>
+      <tr><td>Title Deed Issuance</td><td>AED 520</td></tr>
+      <tr><td>Valuation + Conveyancing (est.)</td><td style="color:#7a8899">AED 7,500–13,500</td></tr>
+      <tr class="tot"><td>True Total Cost (excl. est.)</td><td>${fmtAED(c.totalCOA - c.valEst - c.convEst + DEED)}</td></tr>
+    </table>
+  </div>
+</div>
+
+${c.shock ? `
+<!-- RATE SHOCK -->
+<div class="sec">
+  <div class="sec-title">Rate Shock Analysis — EIBOR Scenarios</div>
+  <table class="shock-tbl">
+    <thead><tr><th style="text-align:left">Scenario</th><th>Rate</th><th>Monthly P+I</th><th>Monthly All-In</th><th>DBR Impact</th></tr></thead>
+    <tbody>${c.shock.map(x => `<tr>
+      <td>${x.label}</td><td>${fmtPct(x.rate)}</td><td>${fmtAED(x.pay)}</td><td>${fmtAED(x.allIn)}</td>
+      <td style="color:${x.dbr>50?'#b71c1c':x.dbr>40?'#e65100':'#2e7d32'};font-weight:700">${fmtPct(x.dbr)}</td>
+    </tr>`).join('')}</tbody>
+  </table>
+</div>` : ''}
+
+<!-- ANNUAL SUMMARY -->
+<div class="sec">
+  <div class="sec-title">Annual Amortization Summary</div>
+  <div style="overflow-x:auto;margin-bottom:16px">${amortSVG(years, false)}</div>
+  <div style="overflow-x:auto">
+    <table class="tbl yr-tbl" style="width:100%;border-collapse:collapse">
+      <thead><tr>
+        <th style="text-align:center">Year</th><th>Opening Balance</th><th>Principal Paid</th>
+        <th>Interest Paid</th><th>Life Insurance</th><th>Total Payment</th><th>Closing Balance</th>
+      </tr></thead>
+      <tbody>${years.map((y, i) => `<tr class="${(i+1)%5===0?'yr':''}">
+        <td style="text-align:center;color:#546e7a;font-weight:600">${y.year}</td>
+        <td>${fmtAED(y.openBal)}</td><td>${fmtAED(y.prin)}</td><td>${fmtAED(y.interest)}</td>
+        <td>${fmtAED(y.lifeIns)}</td><td>${fmtAED(y.prin+y.interest)}</td><td>${fmtAED(y.closeBal)}</td>
+      </tr>`).join('')}</tbody>
+    </table>
+  </div>
+</div>
+
+<!-- FULL AMORTIZATION -->
+<div class="sec">
+  <div class="sec-title">Full Monthly Amortization Schedule — ${c.rows.length} months</div>
+  <div class="full-wrap" style="overflow-y:auto;max-height:520px;border:1px solid #e8eaed;border-radius:6px">
+    <table class="full-tbl" style="width:100%;border-collapse:collapse">
+      <thead><tr>
+        <th>Mo</th><th>Payment</th><th>Principal</th><th>Interest</th>
+        <th>Life Ins.</th><th>Cum. Interest</th><th>Balance</th>
+      </tr></thead>
+      <tbody>${c.rows.map(r => `<tr>
+        <td>${r.m}</td><td>${fmtAED(r.pay)}</td><td>${fmtAED(r.prin)}</td>
+        <td>${fmtAED(r.interest)}</td><td>${fmtAED(r.lifeIns)}</td>
+        <td>${fmtAED(r.cumInt)}</td><td>${fmtAED(r.bal)}</td>
+      </tr>`).join('')}</tbody>
+    </table>
+  </div>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="sec">
+  <div class="disc">
+    <strong>Disclaimer:</strong> These calculations are indicative only and generated on ${dStr} at ${tStr} (UAE time). Actual mortgage terms, rates, fees, and insurance vary by lender and are subject to individual credit assessment, property type, and prevailing market conditions. CBUAE regulatory limits referenced are based on publicly available guidelines and subject to change. This report does not constitute financial advice, an offer to lend, or a guarantee of approval. Reference: <strong>${refNo}</strong>.
+  </div>
+  <div style="text-align:center;margin-top:14px;font-size:.69rem;color:#9aa5b4">
+    UAE Financial Calculator &nbsp;·&nbsp; Generated ${dStr} &nbsp;·&nbsp; All figures in UAE Dirhams (AED) &nbsp;·&nbsp; Ref: ${refNo}
+  </div>
+</div>
+
+<div class="print-bar">
+  <button class="btn-close" onclick="window.close()">Close</button>
+  <button class="btn-print" onclick="window.print()">Print / Save as PDF</button>
+</div>
+</div></body></html>`;
+
+  const w = window.open('', '_blank');
+  w.document.write(html);
+  w.document.close();
+}
+
+function openLoanReport(c, s) {
+  const now   = new Date();
+  const dStr  = now.toLocaleDateString('en-AE', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  const tStr  = now.toLocaleTimeString('en-AE', { hour:'2-digit', minute:'2-digit' });
+  const refNo = 'PL-' + Date.now().toString(36).toUpperCase().slice(-8);
+  const dbrCol = c.dbr > 50 ? '#b71c1c' : c.dbr > 40 ? '#e65100' : '#2e7d32';
+  const years  = buildYears(c.rows);
+
+  const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>
+<title>Personal Loan Report ${refNo}</title>
+<style>${reportStyles()}</style></head><body><div class="page">
+
+<div class="rpt-header">
+  <div class="ref-tag">Ref: ${refNo}</div>
+  <div class="rpt-h1">Personal Loan Analysis Report</div>
+  <div class="rpt-sub">UAE Financial Calculator &nbsp;·&nbsp; CBUAE-Compliant Indicative Assessment</div>
+  <div class="rpt-meta">
+    <div class="rpt-meta-item"><div class="lbl">Report Date</div><div class="val">${dStr}</div></div>
+    <div class="rpt-meta-item"><div class="lbl">Time (UAE)</div><div class="val">${tStr}</div></div>
+    <div class="rpt-meta-item"><div class="lbl">Applicant</div><div class="val">${s.appType === 'exp' ? 'Expat' : 'UAE National'}</div></div>
+    <div class="rpt-meta-item"><div class="lbl">Max Tenor</div><div class="val">${c.maxT} months</div></div>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- OVERVIEW -->
+<div class="sec">
+  <div class="sec-title">Loan Overview</div>
+  <div class="g3">
+    <div class="info-card" style="border-color:#0d2137">
+      <div class="lbl">Loan Amount</div><div class="val">${fmtAED(c.loan)}</div>
+      <div class="note">Max (20× salary): ${fmtAED(c.maxL)}</div>
+    </div>
+    <div class="info-card" style="border-color:#0d6efd">
+      <div class="lbl">Tenor</div><div class="val">${c.tenor} months</div>
+      <div class="note">Max for ${s.appType === 'exp' ? 'Expat' : 'UAE National'}: ${c.maxT} months</div>
+    </div>
+    <div class="info-card" style="border-color:#e65100">
+      <div class="lbl">Reducing Balance Rate</div><div class="val">${fmtPct(c.reducing)}</div>
+      <div class="note">Flat rate equivalent: ${fmtPct(c.flatEq)}</div>
+    </div>
+    <div class="info-card" style="border-color:#6a1b9a">
+      <div class="lbl">APR (Reducing Bal.)</div><div class="val">${fmtPct(c.apr)}</div>
+      <div class="note">IRR on full cash flows incl. fees</div>
+    </div>
+    <div class="info-card" style="border-color:#b71c1c">
+      <div class="lbl">Monthly Payment</div><div class="val">${fmtAED(c.pay)}</div>
+      <div class="note">Fixed for full term</div>
+    </div>
+    <div class="info-card" style="border-color:#1b5e20">
+      <div class="lbl">Total Cost</div><div class="val">${fmtAED(c.totCost)}</div>
+      <div class="note">Incl. fees ${s.lifeIns?'+ insurance':''}</div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPLIANCE -->
+<div class="sec">
+  <div class="sec-title">Compliance Dashboard</div>
+  <div class="compliance-strip">
+    <div class="cp" style="background:${c.salaryOK?'#e8f5e9':'#ffebee'};border:2px solid ${c.salaryOK?'#a5d6a7':'#ef9a9a'}">
+      <div class="lbl">Salary Multiplier</div>
+      <div class="val" style="color:${c.salaryOK?'#1b5e20':'#b71c1c'}">${num(s.netSalary)>0?(c.loan/num(s.netSalary)).toFixed(2):0}×</div>
+      <div class="note">Max 20× &nbsp;<span class="badge ${c.salaryOK?'bg':'br'}">${c.salaryOK?'PASS':'BREACH'}</span></div>
+    </div>
+    <div class="cp" style="background:${c.tenorOK?'#e8f5e9':'#ffebee'};border:2px solid ${c.tenorOK?'#a5d6a7':'#ef9a9a'}">
+      <div class="lbl">Tenor Limit</div>
+      <div class="val" style="color:${c.tenorOK?'#1b5e20':'#b71c1c'}">${c.tenor}m</div>
+      <div class="note">Max ${c.maxT}m &nbsp;<span class="badge ${c.tenorOK?'bg':'br'}">${c.tenorOK?'PASS':'BREACH'}</span></div>
+    </div>
+    <div class="cp" style="background:${c.dbr>50?'#ffebee':c.dbr>40?'#fff3e0':'#e8f5e9'};border:2px solid ${c.dbr>50?'#ef9a9a':c.dbr>40?'#ffcc80':'#a5d6a7'}">
+      <div class="lbl">Debt Burden Ratio</div>
+      <div class="val" style="color:${dbrCol}">${fmtPct(c.dbr)}</div>
+      <div class="note">50% hard cap &nbsp;<span class="badge ${c.dbr>50?'br':c.dbr>40?'ba':'bg'}">${c.dbr>50?'BREACH':c.dbr>40?'CAUTION':'PASS'}</span></div>
+    </div>
+    <div class="cp" style="background:#e3f2fd;border:2px solid #90caf9">
+      <div class="lbl">Rate (Reducing)</div>
+      <div class="val" style="color:#0d47a1">${fmtPct(c.reducing)}</div>
+      <div class="note">Flat eq: ${fmtPct(c.flatEq)} &nbsp;<span class="badge bb">${s.rateType==='flat'?'FLAT INPUT':'REDUCING'}</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- INCOME & DBR -->
+<div class="sec">
+  <div class="sec-title">Income &amp; Debt Burden Analysis</div>
+  <div class="g4" style="margin-bottom:14px">
+    <div class="kpi" style="background:#0d2137"><div class="lbl">Net Monthly Salary</div><div class="val">${fmtAED(num(s.netSalary))}</div></div>
+    <div class="kpi" style="background:#37474f"><div class="lbl">Gross Monthly Income</div><div class="val">${fmtAED(num(s.income))}</div></div>
+    <div class="kpi" style="background:#1565c0"><div class="lbl">New Monthly Payment</div><div class="val">${fmtAED(c.pay)}</div></div>
+    <div class="kpi" style="background:${c.dbr>50?'#b71c1c':c.dbr>40?'#e65100':'#2e7d32'}"><div class="lbl">DBR</div><div class="val">${fmtPct(c.dbr)}</div></div>
+  </div>
+  ${dbrBarHTML(c.dbr)}
+</div>
+
+<!-- FINANCIAL SUMMARY -->
+<div class="sec">
+  <div class="sec-title">Financial Summary</div>
+  <div class="g4" style="margin-bottom:16px">
+    <div class="kpi" style="background:#0d2137"><div class="lbl">Monthly Payment</div><div class="val">${fmtAED(c.pay)}</div></div>
+    <div class="kpi" style="background:#b71c1c"><div class="lbl">Total Interest</div><div class="val">${fmtAED(c.totInt)}</div></div>
+    <div class="kpi" style="background:#6a1b9a"><div class="lbl">APR (Reducing)</div><div class="val">${fmtPct(c.apr)}</div></div>
+    <div class="kpi" style="background:#1565c0"><div class="lbl">Processing Fee</div><div class="val">${fmtAED(c.feeAED)}</div></div>
+  </div>
+  <table class="cost-tbl">
+    <tr><td>Loan Principal</td><td>${fmtAED(c.loan)}</td></tr>
+    <tr><td>Total Interest</td><td>${fmtAED(c.totInt)}</td></tr>
+    ${s.lifeIns ? `<tr><td>Life Insurance (declining 0.08% p.a.)</td><td>${fmtAED(c.totIns)}</td></tr>` : ''}
+    <tr><td>Processing Fee</td><td>${fmtAED(c.feeAED)}</td></tr>
+    <tr class="tot"><td>Total Cost of Loan</td><td>${fmtAED(c.totCost)}</td></tr>
+  </table>
+</div>
+
+<!-- ANNUAL SUMMARY -->
+<div class="sec">
+  <div class="sec-title">Annual Amortization Summary</div>
+  <div style="overflow-x:auto;margin-bottom:16px">${amortSVG(years, true)}</div>
+  <div style="overflow-x:auto">
+    <table class="tbl yr-tbl" style="width:100%;border-collapse:collapse">
+      <thead><tr>
+        <th style="text-align:center">Year</th><th>Opening Balance</th><th>Principal Paid</th>
+        <th>Interest Paid</th>${s.lifeIns?'<th>Life Ins.</th>':''}<th>Total Payment</th><th>Closing Balance</th>
+      </tr></thead>
+      <tbody>${years.map((y,i) => `<tr class="${(i+1)%5===0?'yr':''}">
+        <td style="text-align:center;color:#546e7a;font-weight:600">${y.year}</td>
+        <td>${fmtAED(y.openBal)}</td><td>${fmtAED(y.prin)}</td><td>${fmtAED(y.interest)}</td>
+        ${s.lifeIns?`<td>${fmtAED(y.ins)}</td>`:''}<td>${fmtAED(y.prin+y.interest)}</td><td>${fmtAED(y.closeBal)}</td>
+      </tr>`).join('')}</tbody>
+    </table>
+  </div>
+</div>
+
+<!-- FULL AMORTIZATION -->
+<div class="sec">
+  <div class="sec-title">Full Monthly Amortization Schedule — ${c.rows.length} months</div>
+  <div class="full-wrap" style="overflow-y:auto;max-height:520px;border:1px solid #e8eaed;border-radius:6px">
+    <table class="full-tbl" style="width:100%;border-collapse:collapse">
+      <thead><tr><th>Mo</th><th>Payment</th><th>Principal</th><th>Interest</th>${s.lifeIns?'<th>Life Ins.</th>':''}<th>Balance</th></tr></thead>
+      <tbody>${c.rows.map(r => `<tr>
+        <td>${r.m}</td><td>${fmtAED(r.pay)}</td><td>${fmtAED(r.prin)}</td>
+        <td>${fmtAED(r.interest)}</td>${s.lifeIns?`<td>${fmtAED(r.ins)}</td>`:''}<td>${fmtAED(r.bal)}</td>
+      </tr>`).join('')}</tbody>
+    </table>
+  </div>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="sec">
+  <div class="disc">
+    <strong>Disclaimer:</strong> These calculations are indicative only and generated on ${dStr} at ${tStr} (UAE time). Actual loan terms, rates, and fees vary by lender and are subject to individual credit assessment. CBUAE regulatory limits referenced are based on publicly available guidelines and subject to change. This report does not constitute financial advice or a guarantee of approval. Reference: <strong>${refNo}</strong>.
+  </div>
+  <div style="text-align:center;margin-top:14px;font-size:.69rem;color:#9aa5b4">
+    UAE Financial Calculator &nbsp;·&nbsp; Generated ${dStr} &nbsp;·&nbsp; All figures in UAE Dirhams (AED) &nbsp;·&nbsp; Ref: ${refNo}
+  </div>
+</div>
+
+<div class="print-bar">
+  <button class="btn-close" onclick="window.close()">Close</button>
+  <button class="btn-print" onclick="window.print()">Print / Save as PDF</button>
+</div>
+</div></body></html>`;
+
+  const w = window.open('', '_blank');
+  w.document.write(html);
+  w.document.close();
+}
+
+/* ─── MORTGAGE CALCULATOR ────────────────────────────────────────────────── */
+
+function MortgageCalc({ onData }) {
+  const [s, setS] = useState({
+    price: 2000000, dp: 400000, val: 2000000,
+    tenor: 25, rateType: 'fixed', fixedRate: 4.50,
+    eibor: 3.50, margin: 1.50, eiborReset: 'annual', initFixed: 0,
+    appType: 'exp', propUse: 'primary',
+    feeType: 'pct', feePct: 1.0, feeAED: 10000,
+    income: 50000, existing: 5000,
+  });
+  const set = (k, v) => setS(p => ({ ...p, [k]: v }));
+
+  const c = useMemo(() => {
+    const price = num(s.price), dp = num(s.dp), val = num(s.val);
+    const loan = Math.max(0, price - dp);
+    const months = num(s.tenor) * 12;
+    const income = num(s.income), exist = num(s.existing);
+
+    const nomRate = s.rateType === 'fixed'
+      ? num(s.fixedRate)
+      : num(s.eibor) + num(s.margin);
+
+    const ltvBase = Math.min(price, val);
+    const ltv = ltvBase > 0 ? (loan / ltvBase) * 100 : 0;
+    const maxL = maxLTV(s.appType, s.propUse, price) * 100;
+    const ltvOK = ltv <= maxL + 0.005;
+
+    const feeAED = s.feeType === 'pct'
+      ? loan * num(s.feePct) / 100
+      : num(s.feeAED);
+
+    if (!ltvOK) return { ltv, maxL, ltvOK, loan };
+    if (loan <= 0 || months <= 0 || nomRate <= 0) return { ltv, maxL, ltvOK: true, loan, empty: true };
+
+    const { rows, pay } = mortgageSchedule(loan, nomRate, months, price);
+    const totInt   = pay * months - loan;
+    const totLife  = rows.reduce((a, r) => a + r.lifeIns, 0);
+    const totProp  = rows.reduce((a, r) => a + r.propIns, 0);
+    const dld4     = price * 0.04;
+    const dldMort  = loan * 0.0025 + 290;
+    const valEst   = 3000;
+    const convEst  = 7500;
+    const totalCOA = loan + totInt + totLife + totProp + dld4 + dldMort + feeAED + valEst + convEst;
+    const allIn    = pay + rows[0].lifeIns + rows[0].propIns;
+    const dbr      = income > 0 ? (exist + allIn) / income * 100 : 0;
+    const apr      = mortgageAPR(loan, rows, feeAED);
+
+    let shock = null;
+    if (s.rateType === 'variable') {
+      shock = [0, 1, 2].map(b => {
+        const r = nomRate + b;
+        const { rows: r2, pay: p2 } = mortgageSchedule(loan, r, months, price);
+        const ai2 = p2 + r2[0].lifeIns + r2[0].propIns;
+        return { label: b === 0 ? 'Current Rate' : `+${b}% EIBOR`, rate: r,
+                 pay: p2, allIn: ai2, dbr: income > 0 ? (exist + ai2) / income * 100 : 0 };
+      });
+    }
+
+    return { ltv, maxL, ltvOK, loan, nomRate, rows, pay, allIn,
+             totInt, totLife, totProp, dld4, dldMort, feeAED, valEst, convEst, totalCOA,
+             dbr, apr, months, shock, price, dp };
+  }, [s]);
+
+  useEffect(() => {
+    onData?.({
+      mort: c.allIn || 0,
+      income: num(s.income),
+      exist: num(s.existing),
+    });
+  }, [c, s.income, s.existing]);
+
+  const dbrSt = !c.dbr ? 'g' : c.dbr > 50 ? 'r' : c.dbr > 40 ? 'a' : 'g';
+  const dbrLbl = dbrSt === 'g' ? 'PASS' : dbrSt === 'a' ? 'CAUTION' : 'BREACH';
+
+  return (
+    <div>
+      <div className="calc-layout">
+        {/* ── INPUTS ── */}
+        <div className="left-col">
+          <div className="card">
+            <div className="card-title">Property &amp; Loan</div>
+
+            <div className="form-group">
+              <label className="form-label">Property Price (AED)</label>
+              <input className="form-input" type="number" value={s.price} onChange={e=>set('price',e.target.value)}/>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Down Payment (AED)</label>
+              <input className="form-input" type="number" value={s.dp} onChange={e=>set('dp',e.target.value)}/>
+              <div className="input-hint">
+                Loan: {fmtAED(c.loan)} &nbsp;|&nbsp; LTV: {fmtPct(c.ltv)} &nbsp;(max {fmtPct(c.maxL)})
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Bank Valuation (AED)</label>
+              <input className="form-input" type="number" value={s.val} onChange={e=>set('val',e.target.value)}/>
+              <div className="input-hint">LTV uses lower of purchase price or bank valuation</div>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Tenor — {s.tenor} years</label>
+              <div className="slider-row">
+                <input type="range" className="slider" min={1} max={25} value={s.tenor}
+                  onChange={e=>set('tenor',+e.target.value)}/>
+                <span className="slider-val">{s.tenor}y</span>
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Applicant Type</label>
+              <div className="toggle-group">
+                <button className={`toggle-btn${s.appType==='exp'?' active':''}`} onClick={()=>set('appType','exp')}>Expat</button>
+                <button className={`toggle-btn${s.appType==='nat'?' active':''}`} onClick={()=>set('appType','nat')}>UAE National</button>
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Property Use</label>
+              <div className="toggle-group">
+                <button className={`toggle-btn${s.propUse==='primary'?' active':''}`} onClick={()=>set('propUse','primary')}>Primary Residence</button>
+                <button className={`toggle-btn${s.propUse==='inv'?' active':''}`} onClick={()=>set('propUse','inv')}>Investment / 2nd</button>
+              </div>
+            </div>
+          </div>
+
+          <div className="card">
+            <div className="card-title">Interest Rate</div>
+            <div className="form-group">
+              <div className="toggle-group">
+                <button className={`toggle-btn${s.rateType==='fixed'?' active':''}`} onClick={()=>set('rateType','fixed')}>Fixed</button>
+                <button className={`toggle-btn${s.rateType==='variable'?' active':''}`} onClick={()=>set('rateType','variable')}>Variable (EIBOR)</button>
+              </div>
+            </div>
+            {s.rateType === 'fixed' ? (
+              <div className="form-group">
+                <label className="form-label">Fixed Rate (% p.a.)</label>
+                <input className="form-input" type="number" step="0.01" value={s.fixedRate} onChange={e=>set('fixedRate',e.target.value)}/>
+              </div>
+            ) : (
+              <>
+                <div className="form-group">
+                  <label className="form-label">EIBOR (%)</label>
+                  <input className="form-input" type="number" step="0.01" value={s.eibor} onChange={e=>set('eibor',e.target.value)}/>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Bank Margin (%)</label>
+                  <input className="form-input" type="number" step="0.01" value={s.margin} onChange={e=>set('margin',e.target.value)}/>
+                  <div className="input-hint">Total Rate: {fmtPct(num(s.eibor)+num(s.margin))}</div>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">EIBOR Reset Frequency</label>
+                  <select className="form-select" value={s.eiborReset} onChange={e=>set('eiborReset',e.target.value)}>
+                    <option value="annual">Annual</option>
+                    <option value="semi">Semi-Annual</option>
+                    <option value="quarterly">Quarterly</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Initial Fixed Period</label>
+                  <select className="form-select" value={s.initFixed} onChange={e=>set('initFixed',+e.target.value)}>
+                    <option value={0}>None</option>
+                    <option value={12}>12 months</option>
+                    <option value={24}>24 months</option>
+                    <option value={36}>36 months</option>
+                  </select>
+                </div>
+              </>
+            )}
+          </div>
+
+          <div className="card">
+            <div className="card-title">Income &amp; Fees</div>
+            <div className="form-group">
+              <label className="form-label">Gross Monthly Income (AED)</label>
+              <input className="form-input" type="number" value={s.income} onChange={e=>set('income',e.target.value)}/>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Existing Monthly Obligations (AED)</label>
+              <input className="form-input" type="number" value={s.existing} onChange={e=>set('existing',e.target.value)}/>
+              <div className="input-hint">Exclude proposed mortgage</div>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Bank Processing Fee</label>
+              <div className="toggle-group" style={{marginBottom:7}}>
+                <button className={`toggle-btn${s.feeType==='pct'?' active':''}`} onClick={()=>set('feeType','pct')}>% of Loan</button>
+                <button className={`toggle-btn${s.feeType==='aed'?' active':''}`} onClick={()=>set('feeType','aed')}>Fixed AED</button>
+              </div>
+              {s.feeType==='pct'
+                ? <input className="form-input" type="number" step="0.01" value={s.feePct} onChange={e=>set('feePct',e.target.value)} placeholder="%"/>
+                : <input className="form-input" type="number" value={s.feeAED} onChange={e=>set('feeAED',e.target.value)} placeholder="AED"/>
+              }
+              {c.feeAED !== undefined && <div className="input-hint">Fee amount: {fmtAED(c.feeAED)}</div>}
+            </div>
+          </div>
+        </div>
+
+        {/* ── OUTPUTS ── */}
+        <div className="right-col">
+          {!c.ltvOK && (
+            <div className="blocked">
+              <div className="blocked-title">LTV Limit Exceeded — Results Blocked</div>
+              <div>Current LTV: <strong>{fmtPct(c.ltv)}</strong> &nbsp;|&nbsp; Maximum Allowed: <strong>{fmtPct(c.maxL)}</strong></div>
+              <div style={{marginTop:8,fontWeight:400,fontSize:'.82rem'}}>Increase your down payment or reduce the loan amount to proceed.</div>
+            </div>
+          )}
+
+          {c.ltvOK && !c.empty && c.rows && (<>
+            {/* Export button */}
+            <div style={{display:'flex',justifyContent:'flex-end'}}>
+              <button onClick={() => openMortgageReport(c, s)} className="btn-export">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Export Full Report
+              </button>
+            </div>
+            {/* Compliance */}
+            <div className="card">
+              <div className="card-title">Compliance Status</div>
+              <div className="compliance-row">
+                <span className="compliance-label">LTV Ratio</span>
+                <span>{fmtPct(c.ltv)} / {fmtPct(c.maxL)} max &nbsp;<Badge s="g" t="PASS"/></span>
+              </div>
+              <div className="compliance-row">
+                <span className="compliance-label">Debt Burden Ratio (DBR)</span>
+                <span><span className="compliance-val">{fmtPct(c.dbr)}</span><Badge s={dbrSt} t={dbrLbl}/></span>
+              </div>
+              {s.rateType==='variable' && (
+                <div className="compliance-row">
+                  <span className="compliance-label">Rate Type Disclosure</span>
+                  <Badge s="a" t="VARIABLE — EIBOR LINKED"/>
+                </div>
+              )}
+              <div className="compliance-row">
+                <span className="compliance-label">Early Settlement (CBUAE)</span>
+                <span className="compliance-val" style={{fontSize:'.78rem'}}>min(1% of outstanding balance, AED 10,000)</span>
+              </div>
+              <div className="compliance-row">
+                <span className="compliance-label">Life Insurance</span>
+                <span className="compliance-val" style={{fontSize:'.78rem'}}>0.10% p.a. on declining balance</span>
+              </div>
+              <div className="compliance-row">
+                <span className="compliance-label">Property Insurance</span>
+                <span className="compliance-val" style={{fontSize:'.78rem'}}>0.05% p.a. of property value</span>
+              </div>
+            </div>
+
+            {/* Settlement Breakdown */}
+            <SettlementBreakdown c={c} />
+
+            {/* Financial Summary */}
+            <div className="card">
+              <div className="card-title">Financial Summary</div>
+              <div className="metric-grid">
+                <div className="metric-item"><div className="metric-label">Monthly P+I</div><div className="metric-val">{fmtAED(c.pay)}</div></div>
+                <div className="metric-item"><div className="metric-label">Monthly All-In</div><div className="metric-val">{fmtAED(c.allIn)}</div></div>
+                <div className="metric-item"><div className="metric-label">Total Interest</div><div className="metric-val">{fmtAED(c.totInt)}</div></div>
+                <div className="metric-item"><div className="metric-label">APR (Reducing Balance)</div><div className="metric-val">{fmtPct(c.apr)}</div></div>
+                <div className="metric-item"><div className="metric-label">Nominal Rate</div><div className="metric-val">{fmtPct(c.nomRate)}</div></div>
+                <div className="metric-item">
+                  <div className="metric-label">DBR</div>
+                  <div className="metric-val" style={{color:c.dbr>50?'#991B1B':c.dbr>40?'#92400E':'#065F46'}}>{fmtPct(c.dbr)}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Cost of Acquisition */}
+            <div className="card">
+              <div className="card-title">True Total Cost of Acquisition</div>
+              <table className="cost-table">
+                <thead><tr><th>Item</th><th style={{textAlign:'right'}}>Amount</th></tr></thead>
+                <tbody>
+                  <tr><td>Loan Principal</td><td style={{textAlign:'right'}}>{fmtAED(c.loan)}</td></tr>
+                  <tr><td>Total Interest</td><td style={{textAlign:'right'}}>{fmtAED(c.totInt)}</td></tr>
+                  <tr><td>Life Insurance (declining balance)</td><td style={{textAlign:'right'}}>{fmtAED(c.totLife)}</td></tr>
+                  <tr><td>Property Insurance (flat)</td><td style={{textAlign:'right'}}>{fmtAED(c.totProp)}</td></tr>
+                  <tr><td>DLD Transfer Fee (4.00%)</td><td style={{textAlign:'right'}}>{fmtAED(c.dld4)}</td></tr>
+                  <tr><td>DLD Mortgage Registration (0.25% + AED 290)</td><td style={{textAlign:'right'}}>{fmtAED(c.dldMort)}</td></tr>
+                  <tr><td>Bank Processing Fee</td><td style={{textAlign:'right'}}>{fmtAED(c.feeAED)}</td></tr>
+                  <tr className="tr-est"><td>Property Valuation (est.)</td><td>est. AED 2,500 – 3,500</td></tr>
+                  <tr className="tr-est"><td>Conveyancing / NOC (est.)</td><td>est. AED 5,000 – 10,000</td></tr>
+                  <tr className="tr-total"><td>Total Cost of Acquisition</td><td>{fmtAED(c.totalCOA)}</td></tr>
+                </tbody>
+              </table>
+              <div className="disclaimer" style={{marginTop:10}}>
+                Early settlement fee [min(1% outstanding, AED 10,000)] not included — timing varies. Valuation and conveyancing shown as estimates.
+              </div>
+            </div>
+
+            {/* Rate Shock */}
+            {c.shock && (
+              <div className="card">
+                <div className="card-title">Rate Shock Analysis (EIBOR Scenarios)</div>
+                <table className="rate-shock">
+                  <thead><tr><th>Scenario</th><th>Rate</th><th>Monthly P+I</th><th>Monthly All-In</th><th>DBR</th></tr></thead>
+                  <tbody>
+                    {c.shock.map((x, i) => (
+                      <tr key={i} style={i===0?{background:'#f7f9fc'}:{}}>
+                        <td>{x.label}</td>
+                        <td>{fmtPct(x.rate)}</td>
+                        <td>{fmtAED(x.pay)}</td>
+                        <td>{fmtAED(x.allIn)}</td>
+                        <td style={{color: x.dbr>50?'#b71c1c':x.dbr>40?'#e65100':'#2e7d32',fontWeight:600}}>{fmtPct(x.dbr)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </>)}
+        </div>
+      </div>
+
+      {/* ── CHARTS + AMORTIZATION (full width) ── */}
+      {c.ltvOK && !c.empty && c.rows && (<>
+        <div className="grid-2" style={{marginTop:24}}>
+          <div className="card">
+            <div className="card-title">Principal vs Interest Over Time</div>
+            <div className="chart-wrap"><LineBarChart rows={c.rows} type="stacked"/></div>
+            <div className="chart-legend">
+              <span className="chart-legend-item"><span className="leg-dot" style={{background:'#1E3A5F'}}></span>Principal</span>
+              <span className="chart-legend-item"><span className="leg-dot" style={{background:'#93C5FD'}}></span>Interest</span>
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-title">Balance Reduction Curve</div>
+            <div className="chart-wrap"><LineBarChart rows={c.rows} type="line"/></div>
+            <div className="chart-legend">
+              <span className="chart-legend-item"><span className="leg-dot" style={{background:'#1E3A5F',borderRadius:'50%'}}></span>Outstanding Balance</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="card" style={{marginTop:24}}>
+          <div className="card-title">Full Amortization Schedule — {c.rows.length} months ({num(s.tenor)} years)</div>
+          <div className="amort-wrap">
+            <table className="amort-table">
+              <thead>
+                <tr>
+                  <th style={{textAlign:'center'}}>Mo</th>
+                  <th>Payment</th>
+                  <th>Principal</th>
+                  <th>Interest</th>
+                  <th>Life Ins.</th>
+                  <th>Cum. Interest</th>
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                {c.rows.map(r => (
+                  <tr key={r.m}>
+                    <td>{r.m}</td>
+                    <td>{fmtAED(r.pay)}</td>
+                    <td>{fmtAED(r.prin)}</td>
+                    <td>{fmtAED(r.interest)}</td>
+                    <td>{fmtAED(r.lifeIns)}</td>
+                    <td>{fmtAED(r.cumInt)}</td>
+                    <td className="bal-col">{fmtAED(r.bal)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </>)}
+
+      <Disclaimer/>
+    </div>
+  );
+}
+
+/* ─── PERSONAL LOAN CALCULATOR ───────────────────────────────────────────── */
+
+function LoanCalc({ onData }) {
+  const [s, setS] = useState({
+    amount: 200000, rateType: 'reducing', rate: 8.0,
+    tenor: 48, appType: 'exp',
+    netSalary: 15000, income: 18000, existing: 2000,
+    feeType: 'pct', feePct: 1.0, feeAED: 2000,
+    lifeIns: false,
+  });
+  const set = (k, v) => setS(p => ({ ...p, [k]: v }));
+
+  const c = useMemo(() => {
+    const loan    = num(s.amount);
+    const tenor   = num(s.tenor);
+    const salary  = num(s.netSalary);
+    const income  = num(s.income);
+    const exist   = num(s.existing);
+    const rawRate = num(s.rate);
+    const maxT    = s.appType === 'nat' ? 60 : 48;
+    const maxL    = salary * 20;
+
+    let reducing, flatEq;
+    if (s.rateType === 'flat') {
+      reducing = flatToReducing(rawRate, tenor, loan);
+      flatEq   = rawRate;
+    } else {
+      reducing = rawRate;
+      flatEq   = reducingToFlat(rawRate, tenor);
+    }
+
+    const feeAED = s.feeType === 'pct'
+      ? loan * num(s.feePct) / 100
+      : num(s.feeAED);
+
+    const salaryOK = loan <= maxL;
+    const tenorOK  = tenor <= maxT;
+
+    if (loan <= 0 || tenor <= 0 || reducing <= 0)
+      return { salaryOK, tenorOK, maxL, maxT, feeAED, reducing, flatEq, empty: true };
+
+    const { rows, pay } = loanSchedule(loan, reducing, tenor, s.lifeIns);
+    const totInt  = pay * tenor - loan;
+    const totIns  = rows.reduce((a, r) => a + r.ins, 0);
+    const totCost = loan + totInt + totIns + feeAED;
+    const dbr     = income > 0 ? (exist + pay) / income * 100 : 0;
+    const apr     = loanAPR(loan, rows, feeAED);
+
+    return { salaryOK, tenorOK, maxL, maxT, feeAED, reducing, flatEq,
+             rows, pay, totInt, totIns, totCost, dbr, apr, loan, tenor };
+  }, [s]);
+
+  useEffect(() => {
+    onData?.({ loan: c.pay || 0, income: num(s.income), exist: num(s.existing) });
+  }, [c, s.income, s.existing]);
+
+  const dbrSt  = !c.dbr ? 'g' : c.dbr > 50 ? 'r' : c.dbr > 40 ? 'a' : 'g';
+  const dbrLbl = dbrSt === 'g' ? 'PASS' : dbrSt === 'a' ? 'CAUTION ≥40%' : 'BREACH >50%';
+  const mult   = num(s.netSalary) > 0 ? (num(s.amount) / num(s.netSalary)) : 0;
+
+  return (
+    <div>
+      <div className="calc-layout">
+        {/* ── INPUTS ── */}
+        <div className="left-col">
+          <div className="card">
+            <div className="card-title">Loan Details</div>
+            <div className="form-group">
+              <label className="form-label">Loan Amount (AED)</label>
+              <input className="form-input" type="number" value={s.amount} onChange={e=>set('amount',e.target.value)}/>
+              {c.maxL > 0 && (
+                <div className={`input-hint${!c.salaryOK?' err':''}`}>
+                  Max (20× net salary): {fmtAED(c.maxL)} {!c.salaryOK && '— EXCEEDS LIMIT'}
+                </div>
+              )}
+            </div>
+            <div className="form-group">
+              <label className="form-label">Tenor — {s.tenor} months</label>
+              <div className="slider-row">
+                <input type="range" className="slider" min={1} max={60} value={s.tenor}
+                  onChange={e=>set('tenor',+e.target.value)}/>
+                <span className="slider-val">{s.tenor}m</span>
+              </div>
+              {!c.tenorOK && (
+                <div className="input-hint err">
+                  Max tenor for {s.appType==='nat'?'UAE National':'Expat'}: {c.maxT} months
+                </div>
+              )}
+            </div>
+            <div className="form-group">
+              <label className="form-label">Applicant Type</label>
+              <div className="toggle-group">
+                <button className={`toggle-btn${s.appType==='exp'?' active':''}`} onClick={()=>set('appType','exp')}>Expat</button>
+                <button className={`toggle-btn${s.appType==='nat'?' active':''}`} onClick={()=>set('appType','nat')}>UAE National</button>
+              </div>
+            </div>
+          </div>
+
+          <div className="card">
+            <div className="card-title">Interest Rate</div>
+            <div className="form-group">
+              <div className="toggle-group">
+                <button className={`toggle-btn${s.rateType==='reducing'?' active':''}`} onClick={()=>set('rateType','reducing')}>Reducing Balance %</button>
+                <button className={`toggle-btn${s.rateType==='flat'?' active':''}`} onClick={()=>set('rateType','flat')}>Flat Rate %</button>
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label">
+                {s.rateType==='flat' ? 'Flat Rate (% p.a.)' : 'Reducing Balance Rate (% p.a.)'}
+              </label>
+              <input className="form-input" type="number" step="0.01" value={s.rate} onChange={e=>set('rate',e.target.value)}/>
+              {c.reducing > 0 && c.flatEq > 0 && (
+                <div className="input-hint">
+                  {s.rateType==='flat'
+                    ? `Reducing balance equivalent: ${fmtPct(c.reducing)}`
+                    : `Indicative flat rate equivalent: ${fmtPct(c.flatEq)}`}
+                </div>
+              )}
+            </div>
+            <div className="form-group">
+              <label className="form-label">Life Insurance</label>
+              <div className="toggle-group">
+                <button className={`toggle-btn${!s.lifeIns?' active':''}`} onClick={()=>set('lifeIns',false)}>No</button>
+                <button className={`toggle-btn${s.lifeIns?' active':''}`} onClick={()=>set('lifeIns',true)}>Yes — 0.08% p.a. (declining)</button>
+              </div>
+            </div>
+          </div>
+
+          <div className="card">
+            <div className="card-title">Income &amp; Fees</div>
+            <div className="form-group">
+              <label className="form-label">Net Monthly Salary (AED)</label>
+              <input className="form-input" type="number" value={s.netSalary} onChange={e=>set('netSalary',e.target.value)}/>
+              <div className="input-hint">Used for 20× salary multiplier check</div>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Gross Monthly Income (AED)</label>
+              <input className="form-input" type="number" value={s.income} onChange={e=>set('income',e.target.value)}/>
+              <div className="input-hint">Used for DBR calculation</div>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Existing Monthly Obligations (AED)</label>
+              <input className="form-input" type="number" value={s.existing} onChange={e=>set('existing',e.target.value)}/>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Processing Fee</label>
+              <div className="toggle-group" style={{marginBottom:7}}>
+                <button className={`toggle-btn${s.feeType==='pct'?' active':''}`} onClick={()=>set('feeType','pct')}>% of Loan</button>
+                <button className={`toggle-btn${s.feeType==='aed'?' active':''}`} onClick={()=>set('feeType','aed')}>Fixed AED</button>
+              </div>
+              {s.feeType==='pct'
+                ? <input className="form-input" type="number" step="0.01" value={s.feePct} onChange={e=>set('feePct',e.target.value)}/>
+                : <input className="form-input" type="number" value={s.feeAED} onChange={e=>set('feeAED',e.target.value)}/>
+              }
+              {c.feeAED !== undefined && <div className="input-hint">Fee amount: {fmtAED(c.feeAED)}</div>}
+            </div>
+          </div>
+        </div>
+
+        {/* ── OUTPUTS ── */}
+        <div className="right-col">
+          <div className="card">
+            <div className="card-title">Compliance Status</div>
+            <div className="compliance-row">
+              <span className="compliance-label">Salary Multiplier (max 20×)</span>
+              <span>
+                <span className="compliance-val">{mult > 0 ? mult.toFixed(2) + '×' : '—'}</span>
+                <Badge s={c.salaryOK?'g':'r'} t={c.salaryOK?'PASS':'BREACH'}/>
+              </span>
+            </div>
+            <div className="compliance-row">
+              <span className="compliance-label">Tenor Limit ({c.maxT} months max)</span>
+              <span>
+                <span className="compliance-val">{s.tenor}m</span>
+                <Badge s={c.tenorOK?'g':'r'} t={c.tenorOK?'PASS':'BREACH'}/>
+              </span>
+            </div>
+            <div className="compliance-row">
+              <span className="compliance-label">Debt Burden Ratio (DBR)</span>
+              <span>
+                <span className="compliance-val">{c.dbr ? fmtPct(c.dbr) : '—'}</span>
+                <Badge s={dbrSt} t={dbrLbl}/>
+              </span>
+            </div>
+            <div className="compliance-row">
+              <span className="compliance-label">Early Settlement (CBUAE)</span>
+              <span className="compliance-val" style={{fontSize:'.78rem'}}>min(1% outstanding, AED 10,000)</span>
+            </div>
+            {!c.salaryOK && (
+              <div className="alert-r" style={{marginTop:10}}>
+                <strong>Loan amount exceeds maximum permitted.</strong> CBUAE limits personal loans to 20× net monthly salary ({fmtAED(c.maxL)}).
+              </div>
+            )}
+            {!c.tenorOK && (
+              <div className="alert-r" style={{marginTop:8}}>
+                <strong>Tenor exceeds {c.maxT}-month limit</strong> for {s.appType==='nat'?'UAE Nationals':'Expats'}.
+              </div>
+            )}
+            {c.dbr > 50 && (
+              <div className="alert-r" style={{marginTop:8}}>
+                <strong>DBR exceeds 50% hard cap.</strong> CBUAE requires rejection when total obligations exceed 50% of gross income.
+              </div>
+            )}
+            {c.dbr > 40 && c.dbr <= 50 && (
+              <div className="alert-a" style={{marginTop:8}}>
+                <strong>DBR above 40% caution threshold.</strong> Lenders may apply stricter scrutiny.
+              </div>
+            )}
+          </div>
+
+          {!c.empty && c.rows && (<>
+            <div style={{display:'flex',justifyContent:'flex-end'}}>
+              <button onClick={() => openLoanReport(c, s)} className="btn-export">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Export Full Report
+              </button>
+            </div>
+            <div className="card">
+              <div className="card-title">Financial Summary</div>
+              <div className="metric-grid">
+                <div className="metric-item"><div className="metric-label">Monthly Payment</div><div className="metric-val">{fmtAED(c.pay)}</div></div>
+                <div className="metric-item"><div className="metric-label">Total Interest</div><div className="metric-val">{fmtAED(c.totInt)}</div></div>
+                <div className="metric-item"><div className="metric-label">APR (Reducing Balance)</div><div className="metric-val">{fmtPct(c.apr)}</div></div>
+                <div className="metric-item"><div className="metric-label">Flat Rate Equivalent</div><div className="metric-val">{fmtPct(c.flatEq)}</div></div>
+                <div className="metric-item"><div className="metric-label">Processing Fee</div><div className="metric-val">{fmtAED(c.feeAED)}</div></div>
+                {s.lifeIns && <div className="metric-item"><div className="metric-label">Total Life Insurance</div><div className="metric-val">{fmtAED(c.totIns)}</div></div>}
+                <div className="metric-item"><div className="metric-label">Total Cost</div><div className="metric-val">{fmtAED(c.totCost)}</div></div>
+                <div className="metric-item">
+                  <div className="metric-label">DBR</div>
+                  <div className="metric-val" style={{color:c.dbr>50?'#991B1B':c.dbr>40?'#92400E':'#065F46'}}>{fmtPct(c.dbr)}</div>
+                </div>
+              </div>
+            </div>
+          </>)}
+        </div>
+      </div>
+
+      {!c.empty && c.rows && (<>
+        <div className="card" style={{marginTop:24}}>
+          <div className="card-title">Balance Reduction Curve</div>
+          <div className="chart-wrap"><LineBarChart rows={c.rows} type="line"/></div>
+          <div className="chart-legend">
+            <span className="chart-legend-item"><span className="leg-dot" style={{background:'#1E3A5F',borderRadius:'50%'}}></span>Outstanding Balance</span>
+          </div>
+        </div>
+
+        <div className="card" style={{marginTop:24}}>
+          <div className="card-title">Amortization Schedule — {c.rows.length} months</div>
+          <div className="amort-wrap">
+            <table className="amort-table">
+              <thead>
+                <tr>
+                  <th>Mo</th>
+                  <th>Payment</th>
+                  <th>Principal</th>
+                  <th>Interest</th>
+                  {s.lifeIns && <th>Life Ins.</th>}
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                {c.rows.map(r => (
+                  <tr key={r.m}>
+                    <td>{r.m}</td>
+                    <td>{fmtAED(r.pay)}</td>
+                    <td>{fmtAED(r.prin)}</td>
+                    <td>{fmtAED(r.interest)}</td>
+                    {s.lifeIns && <td>{fmtAED(r.ins)}</td>}
+                    <td className="bal-col">{fmtAED(r.bal)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </>)}
+
+      <Disclaimer/>
+    </div>
+  );
+}
+
+/* ─── COMBINED DBR VIEW ──────────────────────────────────────────────────── */
+
+function CombinedDBR({ mortData, loanData }) {
+  const mortObl  = mortData?.mort   || 0;
+  const loanObl  = loanData?.loan   || 0;
+  const existObl = Math.max(mortData?.exist || 0, loanData?.exist || 0);
+  const income   = Math.max(mortData?.income || 0, loanData?.income || 0);
+  const totalObl = mortObl + loanObl + existObl;
+  const dbr      = income > 0 ? (totalObl / income) * 100 : 0;
+  const dbrSt    = dbr > 50 ? 'r' : dbr > 40 ? 'a' : 'g';
+
+  return (
+    <div>
+      <div className="card">
+        <div className="card-title">Combined Debt Burden Ratio Dashboard</div>
+        <div className="dbr-gauge-wrap">
+          <div style={{flexShrink:0}}>
+            <GaugeSVG dbr={dbr}/>
+            <div style={{textAlign:'center',marginTop:6}}>
+              <Badge
+                s={dbrSt}
+                t={dbrSt==='g'?'ACCEPTABLE':dbrSt==='a'?'CAUTION ≥40%':'BREACH >50%'}
+              />
+            </div>
+          </div>
+          <div className="dbr-rows">
+            <div className="dbr-row">
+              <span>Mortgage Monthly Obligation (P+I + Insurance)</span>
+              <span style={{fontWeight:600}}>{fmtAED(mortObl)}</span>
+            </div>
+            <div className="dbr-row">
+              <span>Personal Loan Monthly Payment</span>
+              <span style={{fontWeight:600}}>{fmtAED(loanObl)}</span>
+            </div>
+            <div className="dbr-row">
+              <span>Existing Monthly Obligations</span>
+              <span style={{fontWeight:600}}>{fmtAED(existObl)}</span>
+            </div>
+            <div className="dbr-row total">
+              <span>Total Monthly Obligations</span>
+              <span>{fmtAED(totalObl)}</span>
+            </div>
+            <div className="dbr-row" style={{marginTop:12}}>
+              <span>Gross Monthly Income</span>
+              <span style={{fontWeight:600}}>{fmtAED(income)}</span>
+            </div>
+            <div className="dbr-row total" style={{fontSize:'1rem'}}>
+              <span>Combined DBR</span>
+              <span style={{color:dbr>50?'#b71c1c':dbr>40?'#e65100':'#2e7d32',fontWeight:700}}>
+                {fmtPct(dbr)}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {dbr > 50 && (
+          <div className="alert-r">
+            <strong>DBR Breach:</strong> Combined obligations exceed 50% of gross income. CBUAE regulations require lenders to reject applications where DBR exceeds 50%.
+          </div>
+        )}
+        {dbr > 40 && dbr <= 50 && (
+          <div className="alert-a">
+            <strong>Caution:</strong> Combined DBR exceeds 40%. While within CBUAE limits, lenders may apply stricter scrutiny above this threshold.
+          </div>
+        )}
+        {(mortObl === 0 || loanObl === 0) && (
+          <div className="info-box">
+            Enter values in both the Mortgage Calculator and Personal Loan Calculator tabs to see a full combined DBR analysis.
+          </div>
+        )}
+        <div className="info-box" style={{marginTop:8}}>
+          CBUAE regulations require lenders to assess total debt burden across all obligations. DBR = total monthly obligations ÷ gross monthly income × 100.
+        </div>
+      </div>
+
+      {/* DBR scale reference */}
+      <div className="card">
+        <div className="card-title">DBR Threshold Reference</div>
+        <table className="cost-table">
+          <thead><tr><th>DBR Range</th><th>Status</th><th>CBUAE Guidance</th></tr></thead>
+          <tbody>
+            <tr><td>0% – 40%</td><td><Badge s="g" t="ACCEPTABLE"/></td><td>Within standard lending guidelines</td></tr>
+            <tr><td>40% – 50%</td><td><Badge s="a" t="CAUTION"/></td><td>Elevated — lenders may apply additional conditions</td></tr>
+            <tr><td>Above 50%</td><td><Badge s="r" t="BREACH"/></td><td>Exceeds CBUAE hard cap — loan must be declined</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <Disclaimer/>
+    </div>
+  );
+}
+
+/* ─── APP ROOT ───────────────────────────────────────────────────────────── */
+
+function App() {
+  const [tab, setTab] = useState(0);
+  const [mortData, setMortData] = useState({});
+  const [loanData, setLoanData] = useState({});
+
+  return (
+    <div>
+      <div className="app-header">
+        <h1>UAE Financial Calculator</h1>
+        <p>CBUAE-Compliant Mortgage &amp; Personal Loan Analysis — All calculations run client-side</p>
+      </div>
+      <div className="tab-nav">
+        <div className="tab-pill-wrap">
+          {['Mortgage Calculator','Personal Loan Calculator','Combined DBR View'].map((t,i)=>(
+            <button key={i} className={`tab-btn${tab===i?' active':''}`} onClick={()=>setTab(i)}>{t}</button>
+          ))}
+        </div>
+      </div>
+      <div className="container">
+        {tab===0 && <MortgageCalc onData={setMortData}/>}
+        {tab===1 && <LoanCalc onData={setLoanData}/>}
+        {tab===2 && <CombinedDBR mortData={mortData} loanData={loanData}/>}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>

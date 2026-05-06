@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&display=swap');
+
+/* ─── Lavish Morocco – Global Scoped Styles ─────────────────────────── */
+
+.lavish-root {
+  --lv-black:        #080808;
+  --lv-charcoal:     #111111;
+  --lv-dark:         #161616;
+  --lv-elevated:     #1e1e1e;
+  --lv-gold:         #C4A35A;
+  --lv-gold-light:   #DFC08A;
+  --lv-gold-bright:  #F0D890;
+  --lv-gold-dark:    #8A6A28;
+  --lv-gold-tint:    rgba(196, 163, 90, 0.07);
+  --lv-gold-border:  rgba(196, 163, 90, 0.22);
+  --lv-cream:        #F5F0E8;
+  --lv-muted:        #C8BFA8;
+  --lv-subtle:       rgba(255,255,255,0.05);
+  --lv-border:       rgba(255,255,255,0.07);
+
+  background-color: var(--lv-black);
+  color: var(--lv-cream);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.lavish-root .font-cormorant,
+.lavish-root [class*="font-cormorant"] {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* Ken Burns hero */
+@keyframes lv-kenburns {
+  0%   { transform: scale(1)    translate(0,    0);    }
+  100% { transform: scale(1.09) translate(-1.5%, -0.8%); }
+}
+.lv-kenburns {
+  animation: lv-kenburns 18s ease-in-out infinite alternate;
+}
+
+/* Gold shimmer text */
+@keyframes lv-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.lv-gold-shimmer {
+  background: linear-gradient(90deg, #C4A35A 0%, #F0D890 45%, #C4A35A 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: lv-shimmer 4s linear infinite;
+}
+
+/* Static gold gradient text */
+.lv-text-gold {
+  background: linear-gradient(135deg, #C4A35A 0%, #DFC08A 60%, #C4A35A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Scroll bar override inside lavish */
+.lavish-root ::-webkit-scrollbar        { width: 4px; }
+.lavish-root ::-webkit-scrollbar-track  { background: var(--lv-black); }
+.lavish-root ::-webkit-scrollbar-thumb  { background: var(--lv-gold); border-radius: 2px; }
+
+/* Selection */
+.lavish-root ::selection {
+  background: rgba(196, 163, 90, 0.28);
+  color: var(--lv-gold-bright);
+}
+
+/* Gold horizontal rule ornament */
+.lv-ornament {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--lv-gold);
+}
+.lv-ornament::before,
+.lv-ornament::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--lv-gold-border), transparent);
+}
+
+/* Button gold fill-up hover */
+.lv-btn-gold {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--lv-gold);
+  color: var(--lv-gold);
+  transition: color 0.35s ease;
+}
+.lv-btn-gold::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--lv-gold);
+  transform: translateY(101%);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.lv-btn-gold:hover::after  { transform: translateY(0); }
+.lv-btn-gold:hover         { color: var(--lv-black); }
+.lv-btn-gold span          { position: relative; z-index: 1; }
+
+/* Image hover zoom */
+.lv-img-zoom {
+  overflow: hidden;
+}
+.lv-img-zoom img {
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.lv-img-zoom:hover img { transform: scale(1.06); }
+
+/* Thin gold divider line */
+.lv-divider {
+  width: 48px;
+  height: 1px;
+  background: var(--lv-gold);
+}
+
+/* Card dark surface */
+.lv-card {
+  background: var(--lv-charcoal);
+  border: 1px solid var(--lv-border);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.lv-card:hover {
+  border-color: var(--lv-gold-border);
+  box-shadow: 0 0 40px rgba(196, 163, 90, 0.08);
+}

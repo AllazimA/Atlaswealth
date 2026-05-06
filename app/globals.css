@@ -1,0 +1,288 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gold: #c9a96e;
+  --gold-light: #f0c878;
+  --navy: #050814;
+  --navy-mid: #0d1b3e;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #050814;
+}
+::-webkit-scrollbar-thumb {
+  background: #c9a96e;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #f0c878;
+}
+
+/* Selection */
+::selection {
+  background: rgba(201, 169, 110, 0.3);
+  color: #f0c878;
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 169, 110, 0.1);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 169, 110, 0.2);
+}
+
+/* Gold gradient text */
+.gold-text {
+  background: linear-gradient(135deg, #c9a96e 0%, #f0c878 50%, #c9a96e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Shimmer animation */
+.shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(201, 169, 110, 0.4) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+/* Noise texture overlay */
+.noise {
+  position: relative;
+}
+.noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+/* Timeline connector */
+.timeline-line {
+  position: absolute;
+  left: 16px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, #c9a96e 20%, #c9a96e 80%, transparent);
+}
+
+/* Gradient border */
+.gradient-border {
+  position: relative;
+  border-radius: 16px;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 17px;
+  background: linear-gradient(135deg, rgba(201, 169, 110, 0.5), transparent 50%, rgba(201, 169, 110, 0.2));
+  z-index: -1;
+}
+
+/* Skill bar */
+.skill-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(201, 169, 110, 0.15);
+  overflow: hidden;
+}
+.skill-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #c9a96e, #f0c878);
+  transform-origin: left;
+}
+
+/* Section heading */
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #c9a96e;
+  padding: 6px 16px;
+  border-radius: 100px;
+  background: rgba(201, 169, 110, 0.1);
+  border: 1px solid rgba(201, 169, 110, 0.2);
+}
+
+/* Glow ring for profile image */
+.glow-ring {
+  box-shadow: 0 0 0 2px rgba(201, 169, 110, 0.5), 0 0 30px rgba(201, 169, 110, 0.3), 0 0 60px rgba(201, 169, 110, 0.1);
+}
+
+/* Input focus styles */
+input:focus, textarea:focus {
+  outline: none;
+  border-color: rgba(201, 169, 110, 0.5) !important;
+  box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
+}
+
+/* ─── WealthOS dark theme isolation ─────────────────────────── */
+html:not(.dark) [data-wealthos] {
+  background-color: #111318;
+  color: white;
+  color-scheme: dark;
+}
+html:not(.dark) [data-wealthos] nav {
+  background: #0d0d0d !important;
+  border-bottom-color: rgba(255, 255, 255, 0.05) !important;
+}
+html:not(.dark) [data-wealthos] .text-white {
+  color: white !important;
+}
+html:not(.dark) [data-wealthos] .text-gray-300 {
+  color: #d1d5db !important;
+}
+html:not(.dark) [data-wealthos] .text-gray-400 {
+  color: #9ca3af !important;
+}
+html:not(.dark) [data-wealthos] .text-gray-500 {
+  color: #6b7280 !important;
+}
+html:not(.dark) [data-wealthos] .text-gray-600 {
+  color: #4b5563 !important;
+}
+html:not(.dark) [data-wealthos] [class*="bg-white\/"] {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+html:not(.dark) [data-wealthos] [class*="border-white\/"] {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+html:not(.dark) [data-wealthos] input,
+html:not(.dark) [data-wealthos] select,
+html:not(.dark) [data-wealthos] textarea {
+  color: white !important;
+}
+html:not(.dark) [data-wealthos] input::placeholder {
+  color: #4b5563 !important;
+}
+html:not(.dark) [data-wealthos] input:focus,
+html:not(.dark) [data-wealthos] textarea:focus {
+  box-shadow: none !important;
+}
+
+/* ─── Light mode overrides ──────────────────────────────────── */
+html:not(.dark) body {
+  background-color: #f5f3ef;
+  color: #0d1b3e;
+}
+
+/* Section backgrounds */
+html:not(.dark) .bg-navy-900,
+html:not(.dark) .bg-navy-800,
+html:not(.dark) .bg-navy-700 {
+  background-color: #f5f3ef !important;
+}
+
+/* Alternate section tint */
+html:not(.dark) section:nth-of-type(even) .bg-navy-800,
+html:not(.dark) section.bg-navy-800 {
+  background-color: #edeae3 !important;
+}
+
+/* Text overrides */
+html:not(.dark) .text-white {
+  color: #0d1b3e !important;
+}
+html:not(.dark) .text-gray-300 {
+  color: #334155 !important;
+}
+html:not(.dark) .text-gray-400 {
+  color: #475569 !important;
+}
+html:not(.dark) .text-gray-500 {
+  color: #64748b !important;
+}
+html:not(.dark) .text-gray-600 {
+  color: #64748b !important;
+}
+
+/* Glass cards */
+html:not(.dark) .glass {
+  background: rgba(255, 255, 255, 0.82) !important;
+  border-color: rgba(201, 169, 110, 0.18) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Generic white-opacity backgrounds → light card surfaces */
+html:not(.dark) [class*="bg-white\/"] {
+  background-color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* Border overrides */
+html:not(.dark) [class*="border-white\/"] {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Hover states */
+html:not(.dark) [class*="hover\:bg-white\/2"]:hover,
+html:not(.dark) [class*="hover\:bg-white\/5"]:hover {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+
+/* Expanded experience cards */
+html:not(.dark) .bg-gold-500\/5 {
+  background-color: rgba(201, 169, 110, 0.08) !important;
+}
+
+/* Navbar */
+html:not(.dark) nav:not(.lavish-root nav):not(.lavish-root *) {
+  background: rgba(245, 243, 239, 0.92) !important;
+  border-bottom-color: rgba(201, 169, 110, 0.2) !important;
+}
+
+/* Scrollbar */
+html:not(.dark) ::-webkit-scrollbar-track {
+  background: #f5f3ef;
+}
+
+/* Floating particles canvas */
+#particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
