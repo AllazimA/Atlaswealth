@@ -122,7 +122,7 @@ export default function ContactPage() {
                   </h2>
 
                   <p style={{ fontSize: 14, color: '#C8BFA8', lineHeight: 1.8, marginBottom: 48 }}>
-                    Whether you have a detailed brief or simply a desire to experience Morocco at its finest, we are here. Reach out by form, phone, email, or WhatsApp — we respond to every message personally.
+                    Whether you have a detailed brief or simply a desire to experience Morocco at its finest, we are here. Reach out by form or email — we respond to every message personally.
                   </p>
 
                   {/* Contact methods */}
@@ -176,7 +176,7 @@ export default function ContactPage() {
                   }}>
                     <div style={{ fontSize: 9, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#C4A35A', marginBottom: 8 }}>Response Time</div>
                     <p style={{ fontSize: 13, color: '#C8BFA8', lineHeight: 1.7 }}>
-                      We respond to every enquiry within <strong style={{ color: '#F5F0E8' }}>60 minutes</strong> during business hours. WhatsApp messages are typically answered within 15 minutes.
+                      We respond to every enquiry within <strong style={{ color: '#F5F0E8' }}>60 minutes</strong> during business hours.
                     </p>
                   </div>
                 </motion.div>
