@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" width="600" height="320">
+  <defs>
+    <linearGradient id="g-bronze" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a8742a"></stop>
+      <stop offset="100%" stop-color="#5a3b0e"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="320" fill="#f4ecd5"></rect>
+  <g transform="translate(200 30)">
+    <path d="M 4 232 L 4 56 L 12 56 L 12 44 L 24 44 L 24 36 L 40 36 L 40 28 L 60 28 L 60 22 L 80 22 L 80 16 L 120 16 L 120 22 L 140 22 L 140 28 L 160 28 L 160 36 L 176 36 L 176 44 L 188 44 L 188 56 L 196 56 L 196 232 Z" fill="none" stroke="url(#g-bronze)" stroke-width="2"></path>
+    <path d="M 14 226 L 14 60 L 22 60 L 22 50 L 32 50 L 32 42 L 46 42 L 46 34 L 64 34 L 64 28 L 82 28 L 82 24 L 118 24 L 118 28 L 136 28 L 136 34 L 154 34 L 154 42 L 168 42 L 168 50 L 178 50 L 178 60 L 186 60 L 186 226 Z" fill="none" stroke="url(#g-bronze)" stroke-width="0.7" opacity=".55"></path>
+    <g fill="none" stroke="url(#g-bronze)" stroke-width="0.6" opacity=".5">
+      <rect x="22" y="100" width="14" height="14"></rect>
+      <rect x="22" y="130" width="14" height="14"></rect>
+      <rect x="22" y="160" width="14" height="14"></rect>
+      <rect x="22" y="190" width="14" height="14"></rect>
+      <rect x="164" y="100" width="14" height="14"></rect>
+      <rect x="164" y="130" width="14" height="14"></rect>
+      <rect x="164" y="160" width="14" height="14"></rect>
+      <rect x="164" y="190" width="14" height="14"></rect>
+    </g>
+    <circle cx="100" cy="6" r="3" fill="url(#g-bronze)"></circle>
+    <line x1="100" y1="9" x2="100" y2="22" stroke="url(#g-bronze)" stroke-width="1"></line>
+    <path d="M 50 220 L 50 120 C 50 110, 56 104, 62 104 C 62 70, 80 44, 100 44 C 120 44, 138 70, 138 104 C 144 104, 150 110, 150 120 L 150 220 Z" fill="none" stroke="url(#g-bronze)" stroke-width="2.4"></path>
+    <circle cx="100" cy="50" r="1.8" fill="url(#g-bronze)"></circle>
+    <g fill="url(#g-bronze)" opacity=".7">
+      <circle cx="86" cy="64" r="1.2"></circle>
+      <circle cx="114" cy="64" r="1.2"></circle>
+      <circle cx="76" cy="84" r="1"></circle>
+      <circle cx="124" cy="84" r="1"></circle>
+    </g>
+    <g fill="none" stroke="url(#g-bronze)" stroke-width="6" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="3">
+      <path d="M 58 128 L 58 196"></path>
+      <path d="M 58 196 L 86 196"></path>
+      <path d="M 92 196 L 92 128"></path>
+      <path d="M 92 128 L 112 162"></path>
+      <path d="M 112 162 L 132 128"></path>
+      <path d="M 132 128 L 132 196"></path>
+    </g>
+    <line x1="86" y1="196" x2="92" y2="196" stroke="url(#g-bronze)" stroke-width="6"></line>
+    <line x1="56" y1="208" x2="134" y2="208" stroke="url(#g-bronze)" stroke-width="0.7" opacity=".6"></line>
+    <line x1="0" y1="232" x2="200" y2="232" stroke="url(#g-bronze)" stroke-width="1.2"></line>
+  </g>
+  <text x="300" y="295" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-weight="600" font-size="22" letter-spacing="9" fill="url(#g-bronze)">LAVISH MOROCCO</text>
+</svg>

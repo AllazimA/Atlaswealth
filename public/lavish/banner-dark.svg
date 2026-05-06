@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 420" width="1500" height="420">
+  <defs>
+    <linearGradient id="g-gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fae9b8"></stop>
+      <stop offset="40%" stop-color="#f0d488"></stop>
+      <stop offset="70%" stop-color="#d8b163"></stop>
+      <stop offset="100%" stop-color="#8a5e1c"></stop>
+    </linearGradient>
+    <radialGradient id="g-bg" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#15100a"></stop>
+      <stop offset="100%" stop-color="#0a0805"></stop>
+    </radialGradient>
+    <linearGradient id="g-rule" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#d8b163" stop-opacity="0"></stop>
+      <stop offset="50%" stop-color="#d8b163" stop-opacity="0.5"></stop>
+      <stop offset="100%" stop-color="#d8b163" stop-opacity="0"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="1500" height="420" fill="url(#g-bg)"></rect>
+  <rect x="300" y="18" width="900" height="1" fill="url(#g-rule)"></rect>
+  <rect x="300" y="401" width="900" height="1" fill="url(#g-rule)"></rect>
+
+  
+  <g font-family="Cinzel, Georgia, serif" font-size="11" letter-spacing="4" fill="#8a7a58">
+    <text x="40" y="44"><tspan fill="#d8b163" font-weight="600">LAVISH</tspan> MOROCCO</text>
+    <text x="1460" y="44" text-anchor="end">EST. <tspan fill="#d8b163" font-weight="600">MMXXIV</tspan></text>
+    <text x="40" y="395">MARRAKECH · <tspan fill="#d8b163" font-weight="600">PARIS</tspan></text>
+    <text x="1460" y="395" text-anchor="end">CONCIERGE · <tspan fill="#d8b163" font-weight="600">LIFESTYLE</tspan></text>
+  </g>
+
+  
+  <g transform="translate(150 210)" fill="none" stroke="#d8b163" stroke-opacity="0.35" stroke-width="0.8">
+    <polygon points="0,-22 5,-5 22,0 5,5 0,22 -5,5 -22,0 -5,-5"></polygon>
+    <polygon points="0,-22 5,-5 22,0 5,5 0,22 -5,5 -22,0 -5,-5" transform="rotate(45)"></polygon>
+    <circle r="3" fill="#d8b163" fill-opacity="0.5" stroke="none"></circle>
+  </g>
+  <g transform="translate(1350 210)" fill="none" stroke="#d8b163" stroke-opacity="0.35" stroke-width="0.8">
+    <polygon points="0,-22 5,-5 22,0 5,5 0,22 -5,5 -22,0 -5,-5"></polygon>
+    <polygon points="0,-22 5,-5 22,0 5,5 0,22 -5,5 -22,0 -5,-5" transform="rotate(45)"></polygon>
+    <circle r="3" fill="#d8b163" fill-opacity="0.5" stroke="none"></circle>
+  </g>
+
+  
+  <g transform="translate(420 90) scale(1.05)">
+    <path d="M 4 232 L 4 56 L 12 56 L 12 44 L 24 44 L 24 36 L 40 36 L 40 28 L 60 28 L 60 22 L 80 22 L 80 16 L 120 16 L 120 22 L 140 22 L 140 28 L 160 28 L 160 36 L 176 36 L 176 44 L 188 44 L 188 56 L 196 56 L 196 232 Z" fill="none" stroke="url(#g-gold)" stroke-width="2"></path>
+    <path d="M 14 226 L 14 60 L 22 60 L 22 50 L 32 50 L 32 42 L 46 42 L 46 34 L 64 34 L 64 28 L 82 28 L 82 24 L 118 24 L 118 28 L 136 28 L 136 34 L 154 34 L 154 42 L 168 42 L 168 50 L 178 50 L 178 60 L 186 60 L 186 226 Z" fill="none" stroke="url(#g-gold)" stroke-width="0.7" opacity=".55"></path>
+    <g fill="none" stroke="url(#g-gold)" stroke-width="0.6" opacity=".5">
+      <rect x="22" y="100" width="14" height="14"></rect>
+      <rect x="22" y="130" width="14" height="14"></rect>
+      <rect x="22" y="160" width="14" height="14"></rect>
+      <rect x="22" y="190" width="14" height="14"></rect>
+      <rect x="164" y="100" width="14" height="14"></rect>
+      <rect x="164" y="130" width="14" height="14"></rect>
+      <rect x="164" y="160" width="14" height="14"></rect>
+      <rect x="164" y="190" width="14" height="14"></rect>
+    </g>
+    <circle cx="100" cy="6" r="3" fill="url(#g-gold)"></circle>
+    <line x1="100" y1="9" x2="100" y2="22" stroke="url(#g-gold)" stroke-width="1"></line>
+    <path d="M 50 220 L 50 120 C 50 110, 56 104, 62 104 C 62 70, 80 44, 100 44 C 120 44, 138 70, 138 104 C 144 104, 150 110, 150 120 L 150 220 Z" fill="none" stroke="url(#g-gold)" stroke-width="2.4"></path>
+    <circle cx="100" cy="50" r="1.8" fill="url(#g-gold)"></circle>
+    <g fill="url(#g-gold)" opacity=".7">
+      <circle cx="86" cy="64" r="1.2"></circle>
+      <circle cx="114" cy="64" r="1.2"></circle>
+    </g>
+    <g fill="none" stroke="url(#g-gold)" stroke-width="6" stroke-linecap="square" stroke-linejoin="miter" stroke-miterlimit="3">
+      <path d="M 58 128 L 58 196"></path>
+      <path d="M 58 196 L 86 196"></path>
+      <path d="M 92 196 L 92 128"></path>
+      <path d="M 92 128 L 112 162"></path>
+      <path d="M 112 162 L 132 128"></path>
+      <path d="M 132 128 L 132 196"></path>
+    </g>
+    <line x1="86" y1="196" x2="92" y2="196" stroke="url(#g-gold)" stroke-width="6"></line>
+    <line x1="0" y1="232" x2="200" y2="232" stroke="url(#g-gold)" stroke-width="1.2"></line>
+  </g>
+
+  
+  <text x="900" y="220" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-weight="700" font-size="44" letter-spacing="14" fill="url(#g-gold)">LAVISH MOROCCO</text>
+  <line x1="840" y1="248" x2="960" y2="248" stroke="#b8893a" stroke-width="1"></line>
+  <text x="900" y="282" text-anchor="middle" font-family="JetBrains Mono, Menlo, monospace" font-size="13" letter-spacing="6" fill="#b8893a" fill-opacity="0.85">CRAFTING DREAMS INTO REALITY</text>
+</svg>
