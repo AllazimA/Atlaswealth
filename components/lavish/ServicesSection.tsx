@@ -122,6 +122,7 @@ export default function ServicesSection() {
                 background: '#111',
               }}
             >
+              <Link href="/lavish-morocco/services" style={{ position: 'absolute', inset: 0, zIndex: 2 }} aria-label={service.title} />
               {/* Background image */}
               <img
                 src={service.image}

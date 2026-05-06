@@ -29,12 +29,14 @@ export default function AboutSection() {
             style={{ position: 'relative' }}
           >
             {/* Main image */}
+            <Link href="/lavish-morocco/about" style={{ display: 'block' }}>
             <div
               className="lv-img-zoom"
               style={{
                 position: 'relative',
                 aspectRatio: '3/4',
                 overflow: 'hidden',
+                cursor: 'pointer',
               }}
             >
               <img
@@ -49,6 +51,7 @@ export default function AboutSection() {
                 pointerEvents: 'none',
               }} />
             </div>
+            </Link>
 
             {/* Floating badge */}
             <motion.div

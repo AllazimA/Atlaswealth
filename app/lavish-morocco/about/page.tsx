@@ -48,12 +48,11 @@ const team = [
 ]
 
 const milestones = [
-  { year: '2022', event: 'Lavish Morocco founded by Ahmed Allazim' },
-  { year: '2022', event: 'First 50 clients served, entirely by word of mouth' },
-  { year: '2023', event: 'Expanded services to 8 Moroccan cities' },
-  { year: '2023', event: 'Recognised by Condé Nast Traveller as "Top Emerging Concierge"' },
-  { year: '2024', event: 'Over 500 curated experiences delivered across 15 nationalities' },
-  { year: '2024', event: 'Launched lifestyle management retainer for UHNW clients' },
+  { year: '2022', event: 'Lavish Morocco founded by Ahmed Allazim, setting the foundation for a new standard in bespoke lifestyle and concierge services.' },
+  { year: '2023', event: 'Completed the operational prototype and established a trusted network of over 150 premium partners and service providers across Morocco.' },
+  { year: '2023', event: 'Entered the sandbox phase, successfully curating and delivering services to VVIP clientele.' },
+  { year: '2024', event: 'Delivered over 100 curated experiences to an international clientele spanning 15+ nationalities.' },
+  { year: '2025', event: 'Launched an exclusive lifestyle management retainer tailored for UHNW clients, offering end-to-end bespoke services and privileged access.' },
 ]
 
 const fadeUp = {
