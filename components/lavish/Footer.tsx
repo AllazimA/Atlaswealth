@@ -51,10 +51,10 @@ export default function Footer() {
               Every moment, elevated.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <a href="mailto:info@lavishmorocco.com"
+              <a href="mailto:contact@lavishmorocco.com"
                 style={{ fontSize: 12, color: '#C8BFA8', textDecoration: 'none', letterSpacing: '0.05em', transition: 'color 0.25s' }}
                 className="hover:text-[#C4A35A]">
-                info@lavishmorocco.com
+                contact@lavishmorocco.com
               </a>
               <span style={{ fontSize: 12, color: '#6B6355', letterSpacing: '0.05em' }}>
                 Agadir, Morocco

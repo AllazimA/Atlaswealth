@@ -158,7 +158,7 @@ export default function CTASection() {
           style={{ marginTop: 56, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 32 }}
         >
           {[
-            { label: 'Email', value: 'info@lavishmorocco.com', href: 'mailto:info@lavishmorocco.com' },
+            { label: 'Email', value: 'contact@lavishmorocco.com', href: 'mailto:contact@lavishmorocco.com' },
             { label: 'Office', value: 'Agadir, Morocco', href: '#' },
           ].map(({ label, value, href }) => (
             <div key={label} style={{ textAlign: 'center' }}>
