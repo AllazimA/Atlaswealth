@@ -2,8 +2,11 @@ import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
 export async function POST(req: Request) {
+  console.log('[portfolio-contact] POST called')
+  console.log('[portfolio-contact] API key present:', !!process.env.RESEND_API_KEY)
   const resend = new Resend(process.env.RESEND_API_KEY)
   const body = await req.json()
+  console.log('[portfolio-contact] body:', JSON.stringify(body))
   const { name, email, subject, message } = body
 
   const html = `
