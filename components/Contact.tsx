@@ -26,11 +26,21 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setStatus('sending')
-    // Simulate form submission — replace with EmailJS or API call
-    await new Promise((r) => setTimeout(r, 1500))
-    setStatus('success')
-    setForm({ name: '', email: '', subject: '', message: '' })
-    setTimeout(() => setStatus('idle'), 5000)
+    try {
+      const res = await fetch('/api/portfolio-contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.ok) throw new Error(data.error || 'Failed')
+      setStatus('success')
+      setForm({ name: '', email: '', subject: '', message: '' })
+      setTimeout(() => setStatus('idle'), 5000)
+    } catch {
+      setStatus('error')
+      setTimeout(() => setStatus('idle'), 6000)
+    }
   }
 
   const inputClass = `w-full px-4 py-3.5 rounded-xl text-sm text-white placeholder-gray-600
