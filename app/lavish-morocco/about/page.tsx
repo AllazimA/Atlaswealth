@@ -183,6 +183,91 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* The Symbol */}
+        <section style={{ background: '#080808', padding: '100px 0', borderTop: '1px solid rgba(196,163,90,0.08)' }}>
+          <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 48px' }} className="px-6 lg:px-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+              {/* Logo image */}
+              <motion.div
+                initial={{ opacity: 0, x: -32 }} whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+              >
+                <div style={{ position: 'relative', maxWidth: 420, width: '100%' }}>
+                  <div style={{
+                    position: 'absolute', inset: -1,
+                    background: 'radial-gradient(ellipse at center, rgba(196,163,90,0.08) 0%, transparent 70%)',
+                    borderRadius: 4,
+                  }} />
+                  <img
+                    src="/lavish/lm-logo.png"
+                    alt="Lavish Morocco — The Symbol"
+                    style={{ width: '100%', height: 'auto', mixBlendMode: 'lighten', display: 'block' }}
+                  />
+                </div>
+              </motion.div>
+
+              {/* Story text */}
+              <div>
+                <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.7 }}
+                  style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
+                  <div style={{ width: 40, height: 1, background: '#C4A35A' }} />
+                  <span style={{ fontSize: 10, letterSpacing: '0.5em', textTransform: 'uppercase', color: '#C4A35A', fontWeight: 500 }}>The Symbol</span>
+                </motion.div>
+
+                <motion.h2
+                  initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.85, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  style={{
+                    fontFamily: 'Cormorant Garamond, Georgia, serif',
+                    fontSize: 'clamp(28px, 3.5vw, 46px)',
+                    fontWeight: 300, color: '#F5F0E8', lineHeight: 1.15,
+                    letterSpacing: '0.02em', marginBottom: 32,
+                  }}
+                >
+                  The Deer Was Never<br />
+                  <em style={{ fontStyle: 'italic', color: '#DFC08A' }}>Chosen by Accident</em>
+                </motion.h2>
+
+                <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ fontSize: 15, color: '#C8BFA8', lineHeight: 1.9, marginBottom: 20 }}>
+                  The stag embodies everything LavishMorocco stands for — elegance without arrogance, quiet authority, and a presence that never demands attention yet is impossible to overlook.
+                </motion.p>
+
+                <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.8, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ fontSize: 15, color: '#C8BFA8', lineHeight: 1.9, marginBottom: 20 }}>
+                  Across cultures, the deer symbolises nobility, grace, and the confidence to move through uncharted paths. In Morocco — where ancient tradition meets timeless luxury — that symbolism felt deeply personal.
+                </motion.p>
+
+                <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.8, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ fontSize: 15, color: '#C8BFA8', lineHeight: 1.9, marginBottom: 40 }}>
+                  The antlers speak of growth and prestige. The floral crown reflects Morocco itself — a land of artistry, beauty, and timeless elegance woven into every experience we create.
+                </motion.p>
+
+                {/* Closing quote */}
+                <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.8, delay: 0.34, ease: [0.22, 1, 0.36, 1] }}
+                  style={{
+                    borderLeft: '2px solid #C4A35A',
+                    paddingLeft: 24,
+                    marginTop: 8,
+                  }}
+                >
+                  <p style={{
+                    fontFamily: 'Cormorant Garamond, Georgia, serif',
+                    fontSize: 20, fontWeight: 300, fontStyle: 'italic',
+                    color: '#DFC08A', lineHeight: 1.7, letterSpacing: '0.02em',
+                  }}>
+                    True luxury is not loud.<br />
+                    It is graceful. Intentional. Unforgettable.
+                  </p>
+                </motion.div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
         {/* Founder Bio */}
         <section style={{ background: '#080808', padding: '64px 0' }}>
           <div style={{ maxWidth: 1440, margin: '0 auto', padding: '0 48px' }} className="px-6 lg:px-12">
