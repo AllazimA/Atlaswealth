@@ -31,8 +31,11 @@ export async function POST(req: Request) {
     </div>
   `
 
+  console.log('API key present:', !!process.env.RESEND_API_KEY)
+  console.log('API key prefix:', process.env.RESEND_API_KEY?.slice(0, 8))
+
   try {
-    const { error } = await resend.emails.send({
+    const result = await resend.emails.send({
       from: 'Lavish Morocco <contact@lavishmorocco.com>',
       to: ['a.allazim@gmail.com', 'contact@lavishmorocco.com'],
       replyTo: email,
@@ -40,14 +43,16 @@ export async function POST(req: Request) {
       html,
     })
 
-    if (error) {
-      console.error('Resend error:', error)
-      return NextResponse.json({ ok: false, error: error.message }, { status: 500 })
+    console.log('Resend result:', JSON.stringify(result))
+
+    if (result.error) {
+      console.error('Resend error:', result.error)
+      return NextResponse.json({ ok: false, error: result.error }, { status: 500 })
     }
 
-    return NextResponse.json({ ok: true })
-  } catch (err) {
+    return NextResponse.json({ ok: true, id: result.data?.id })
+  } catch (err: any) {
     console.error('Contact route error:', err)
-    return NextResponse.json({ ok: false, error: 'Failed to send email' }, { status: 500 })
+    return NextResponse.json({ ok: false, error: err?.message || 'Failed to send email' }, { status: 500 })
   }
 }
