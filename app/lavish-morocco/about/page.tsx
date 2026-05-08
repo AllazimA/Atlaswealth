@@ -203,7 +203,7 @@ export default function AboutPage() {
                   <img
                     src="/lavish/lm-logo.png"
                     alt="Lavish Morocco — The Symbol"
-                    style={{ width: '100%', height: 'auto', mixBlendMode: 'lighten', display: 'block' }}
+                    style={{ width: '100%', height: 'auto', display: 'block' }}
                   />
                 </div>
               </motion.div>

@@ -38,7 +38,7 @@ export default function Footer() {
               <img
                 src="/lavish/lm-logo.png"
                 alt="Lavish Morocco"
-                style={{ height: 80, width: 'auto', mixBlendMode: 'lighten' }}
+                style={{ height: 80, width: 'auto' }}
               />
             </div>
             <p style={{ fontSize: 13, lineHeight: 1.8, color: '#C8BFA8', maxWidth: 240, marginBottom: 28 }}>

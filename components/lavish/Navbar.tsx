@@ -52,7 +52,7 @@ export default function Navbar() {
           <img
             src="/lavish/lm-logo.png"
             alt="Lavish Morocco"
-            style={{ height: 64, width: 'auto', mixBlendMode: 'lighten' }}
+            style={{ height: 64, width: 'auto' }}
           />
         </Link>
 
