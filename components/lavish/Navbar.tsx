@@ -48,30 +48,12 @@ export default function Navbar() {
         className="grid grid-cols-[auto_1fr_auto] items-center px-6 lg:px-12 gap-8"
       >
         {/* Logo */}
-        <Link href="/lavish-morocco" className="flex items-center gap-3 shrink-0">
+        <Link href="/lavish-morocco" className="flex items-center shrink-0">
           <img
-            src="/lavish/logo-mark-transparent.svg"
+            src="/lavish/lm-logo.png"
             alt="Lavish Morocco"
-            style={{ height: 48, width: 'auto' }}
+            style={{ height: 64, width: 'auto', mixBlendMode: 'lighten' }}
           />
-          <div className="flex flex-col leading-none">
-            <span style={{
-              fontFamily: 'Cormorant Garamond, Georgia, serif',
-              fontSize: 21, fontWeight: 300,
-              letterSpacing: '0.4em', textTransform: 'uppercase',
-              color: '#F5F0E8', lineHeight: 1,
-            }}>
-              Lavish
-            </span>
-            <span style={{
-              fontFamily: 'Cormorant Garamond, Georgia, serif',
-              fontSize: 10, fontWeight: 500,
-              letterSpacing: '0.72em', textTransform: 'uppercase',
-              color: '#C4A35A', marginTop: 3,
-            }}>
-              Morocco
-            </span>
-          </div>
         </Link>
 
         {/* Center nav */}

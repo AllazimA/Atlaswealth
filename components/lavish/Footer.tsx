@@ -35,16 +35,11 @@ export default function Footer() {
           {/* Brand */}
           <div style={{ gridColumn: 'span 1' }}>
             <div style={{ marginBottom: 24 }}>
-              <div
-                style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: 28, fontWeight: 300, letterSpacing: '0.3em', textTransform: 'uppercase', color: '#F5F0E8', lineHeight: 1 }}
-              >
-                Lavish
-              </div>
-              <div
-                style={{ fontFamily: 'Cormorant Garamond, Georgia, serif', fontSize: 11, fontWeight: 500, letterSpacing: '0.65em', textTransform: 'uppercase', color: '#C4A35A', marginTop: 4 }}
-              >
-                Morocco
-              </div>
+              <img
+                src="/lavish/lm-logo.png"
+                alt="Lavish Morocco"
+                style={{ height: 80, width: 'auto', mixBlendMode: 'lighten' }}
+              />
             </div>
             <p style={{ fontSize: 13, lineHeight: 1.8, color: '#C8BFA8', maxWidth: 240, marginBottom: 28 }}>
               Every detail, anticipated.<br />
