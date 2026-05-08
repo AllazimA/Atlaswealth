@@ -34,7 +34,7 @@ export async function POST(req: Request) {
   try {
     const { error } = await resend.emails.send({
       from: 'Lavish Morocco <onboarding@resend.dev>',
-      to: 'a.allazim@gmail.com',
+      to: ['a.allazim@gmail.com', 'contact@lavishmorocco.com'],
       replyTo: email,
       subject: 'Lavish Morocco Inquiry Request',
       html,
