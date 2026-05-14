@@ -291,7 +291,7 @@ export default function AboutPage() {
                 className="lv-img-zoom" style={{ position: 'relative' }}>
                 <div style={{ aspectRatio: '3/4', overflow: 'hidden', position: 'relative' }}>
                   <img
-                    src="/ahmed.png"
+                    src="/images/ahmed-allazim.png"
                     alt="Ahmed Allazim — Founder & Director"
                     style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center', display: 'block', filter: 'brightness(0.88) saturate(0.9)' }}
                   />
