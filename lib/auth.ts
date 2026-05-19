@@ -1,6 +1,6 @@
 'use client'
 
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, User, onAuthStateChanged as firebaseOnAuthStateChanged } from 'firebase/auth'
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, User, onAuthStateChanged as firebaseOnAuthStateChanged, updateProfile } from 'firebase/auth'
 import { useEffect, useState } from 'react'
 
 let auth: any
@@ -21,10 +21,16 @@ export async function loginWithEmail(email: string, password: string) {
   return signInWithEmailAndPassword(authInstance, email, password)
 }
 
-export async function signupWithEmail(email: string, password: string) {
+export async function signupWithEmail(email: string, password: string, displayName?: string) {
   const authInstance = getAuthInstance()
   if (!authInstance) throw new Error('Firebase not initialized')
-  return createUserWithEmailAndPassword(authInstance, email, password)
+  const result = await createUserWithEmailAndPassword(authInstance, email, password)
+
+  if (displayName && result.user) {
+    await updateProfile(result.user, { displayName })
+  }
+
+  return result
 }
 
 export async function logout() {
