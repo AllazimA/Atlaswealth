@@ -91,23 +91,16 @@ export default function LandingPage() {
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
-                  href="/login"
+                  href="/dashboard"
                   className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-lg bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 font-semibold hover:shadow-lg hover:shadow-gold-500/50 transition-all duration-300 hover:scale-105"
                 >
-                  Login
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  href="/signup"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-lg border border-gold-500/30 text-gold-400 font-semibold hover:bg-gold-500/5 transition-all duration-300"
-                >
-                  Sign Up
+                  Access Dashboard
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
 
               <p className="text-gray-500 text-sm mt-8">
-                No credit card required. Get started in minutes.
+                Start managing your wealth immediately.
               </p>
             </motion.div>
 
@@ -206,8 +199,8 @@ export default function LandingPage() {
             {[
               {
                 step: '1',
-                title: 'Create Account',
-                description: 'Sign up with your email and create a secure account with Firebase authentication.'
+                title: 'Access Dashboard',
+                description: 'Jump directly into your wealth management dashboard with no signup required.'
               },
               {
                 step: '2',
@@ -261,23 +254,23 @@ export default function LandingPage() {
 
             <div className="mt-8 grid md:grid-cols-2 gap-6">
               <div className="p-6 rounded-lg bg-navy-900/50 border border-white/5">
-                <p className="text-gold-400 font-semibold mb-2">🔐 Firebase Authentication</p>
-                <p className="text-gray-400 text-sm">Industry-standard email/password authentication with secure session management</p>
+                <p className="text-gold-400 font-semibold mb-2">🔒 Client-side Processing</p>
+                <p className="text-gray-400 text-sm">All data processing happens securely on your device</p>
               </div>
 
               <div className="p-6 rounded-lg bg-navy-900/50 border border-white/5">
-                <p className="text-gold-400 font-semibold mb-2">🛡️ Data Encryption</p>
-                <p className="text-gray-400 text-sm">All your data is encrypted in transit and at rest using enterprise-grade encryption</p>
+                <p className="text-gold-400 font-semibold mb-2">📊 Real-time Analytics</p>
+                <p className="text-gray-400 text-sm">Advanced portfolio analytics powered by real market data APIs</p>
               </div>
 
               <div className="p-6 rounded-lg bg-navy-900/50 border border-white/5">
-                <p className="text-gold-400 font-semibold mb-2">👤 User Isolation</p>
-                <p className="text-gray-400 text-sm">Your data is completely isolated. Only you can access your portfolio and settings</p>
+                <p className="text-gold-400 font-semibold mb-2">💼 Professional Tools</p>
+                <p className="text-gray-400 text-sm">Enterprise-grade wealth management tools designed for serious investors</p>
               </div>
 
               <div className="p-6 rounded-lg bg-navy-900/50 border border-white/5">
-                <p className="text-gold-400 font-semibold mb-2">📊 Compliance</p>
-                <p className="text-gray-400 text-sm">Built with security best practices and compliance standards in mind</p>
+                <p className="text-gold-400 font-semibold mb-2">⚡ Instant Access</p>
+                <p className="text-gray-400 text-sm">No signup required. Jump directly into the dashboard and start managing your wealth</p>
               </div>
             </div>
           </motion.div>
@@ -297,21 +290,15 @@ export default function LandingPage() {
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               <Link
-                href="/signup"
+                href="/dashboard"
                 className="px-8 py-4 rounded-lg bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 font-semibold hover:shadow-lg hover:shadow-gold-500/50 transition-all duration-300 hover:scale-105"
               >
-                Create Free Account
-              </Link>
-              <Link
-                href="/login"
-                className="px-8 py-4 rounded-lg border border-gold-500/30 text-gold-400 font-semibold hover:bg-gold-500/5 transition-all duration-300"
-              >
-                Sign In
+                Enter Dashboard
               </Link>
             </div>
 
             <p className="text-gray-500 text-sm mt-8">
-              No credit card required • Free to start • Full features access
+              Full features access • No limitations • Start immediately
             </p>
           </motion.div>
         </div>
