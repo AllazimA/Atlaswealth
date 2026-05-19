@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight, TrendingUp, Lock, BarChart3, Zap, Shield } from 'lucide-react'
 import AtlasWealthNavbar from '@/components/AtlasWealthNavbar'
-import Footer from '@/components/Footer'
+import AtlasWealthFooter from '@/components/AtlasWealthFooter'
 
 const features = [
   {
@@ -317,7 +317,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <Footer />
+      <AtlasWealthFooter />
     </main>
   )
 }
