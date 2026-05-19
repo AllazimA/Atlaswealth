@@ -2,6 +2,7 @@
 
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, User, onAuthStateChanged as firebaseOnAuthStateChanged, updateProfile } from 'firebase/auth'
 import { useEffect, useState } from 'react'
+import './firebase' // Initialize Firebase
 
 let auth: any
 
