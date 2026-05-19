@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight, Sparkles, TrendingUp, Lock } from 'lucide-react'
-import Navbar from '@/components/Navbar'
+import AtlasWealthNavbar from '@/components/AtlasWealthNavbar'
 import Footer from '@/components/Footer'
 
 interface AppCard {
@@ -33,15 +33,15 @@ const apps: AppCard[] = [
     ],
     cta: {
       text: 'Browse Services',
-      href: '/lavish-morocco',
+      href: 'https://lavish-morocco.vercel.app',
     },
     icon: <Sparkles className="w-6 h-6" />,
     color: 'from-gold-500 to-gold-300',
   },
   {
-    title: 'WealthOS',
+    title: 'Atlas Wealth',
     subtitle: 'Wealth Management Dashboard',
-    description: 'Intelligent wealth management and investment tracking dashboard. Real-time market data, multi-asset portfolio tracking, and comprehensive financial analytics.',
+    description: 'Intelligent wealth management and investment tracking dashboard. Real-time market data, multi-asset portfolio tracking, and comprehensive financial analytics for your investments.',
     features: [
       'Real-time price tracking with multi-API integration',
       'Portfolio management & analytics',
@@ -51,7 +51,7 @@ const apps: AppCard[] = [
     ],
     cta: {
       text: 'Access Dashboard',
-      href: '/wealthos',
+      href: '/dashboard',
     },
     icon: <TrendingUp className="w-6 h-6" />,
     color: 'from-blue-500 to-blue-300',
@@ -68,7 +68,7 @@ const fadeInUp = {
 export default function LandingPage() {
   return (
     <main className="bg-navy-900 min-h-screen">
-      <Navbar />
+      <AtlasWealthNavbar />
 
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center relative pt-20 overflow-hidden">
@@ -97,18 +97,20 @@ export default function LandingPage() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  href="/lavish-morocco"
+                <a
+                  href="https://lavish-morocco.vercel.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-lg bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 font-semibold hover:shadow-lg hover:shadow-gold-500/50 transition-all duration-300 hover:scale-105"
                 >
                   Explore Lavish Morocco
                   <ArrowRight className="w-4 h-4" />
-                </Link>
+                </a>
                 <Link
-                  href="/wealthos"
+                  href="/dashboard"
                   className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-lg border border-gold-500/30 text-gold-400 font-semibold hover:bg-gold-500/5 transition-all duration-300"
                 >
-                  Access WealthOS
+                  Access Atlas Wealth
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -211,17 +213,25 @@ export default function LandingPage() {
                   </div>
 
                   {/* CTA Button */}
-                  <Link
-                    href={app.cta.href}
-                    className={`inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-300 group/btn
-                      ${app.title === 'Lavish Morocco'
-                        ? 'bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 hover:shadow-lg hover:shadow-gold-500/50 hover:scale-105'
-                        : 'border border-blue-500/50 text-blue-400 hover:bg-blue-500/10 hover:border-blue-500'
-                      }`}
-                  >
-                    {app.cta.text}
-                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                  </Link>
+                  {app.title === 'Lavish Morocco' ? (
+                    <a
+                      href={app.cta.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-300 group/btn bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 hover:shadow-lg hover:shadow-gold-500/50 hover:scale-105`}
+                    >
+                      {app.cta.text}
+                      <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                    </a>
+                  ) : (
+                    <Link
+                      href={app.cta.href}
+                      className={`inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-300 group/btn border border-blue-500/50 text-blue-400 hover:bg-blue-500/10 hover:border-blue-500`}
+                    >
+                      {app.cta.text}
+                      <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                    </Link>
+                  )}
                 </div>
               </motion.div>
             ))}
@@ -244,7 +254,7 @@ export default function LandingPage() {
               </div>
               <div>
                 <h3 className="text-2xl font-light text-white mb-2">Demo Access</h3>
-                <p className="text-gray-400">Use the following credentials to explore WealthOS and test all features</p>
+                <p className="text-gray-400">Use the following credentials to explore Atlas Wealth and test all features</p>
               </div>
             </div>
 
@@ -265,7 +275,7 @@ export default function LandingPage() {
                 <ul className="space-y-2 text-white">
                   <li className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-gold-500" />
-                    WealthOS - Wealth Management Dashboard
+                    Atlas Wealth - Wealth Management Dashboard
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-gold-500" />
@@ -294,17 +304,19 @@ export default function LandingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <Link
-                href="/lavish-morocco"
+              <a
+                href="https://lavish-morocco.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-8 py-4 rounded-lg bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 font-semibold hover:shadow-lg hover:shadow-gold-500/50 transition-all duration-300 hover:scale-105"
               >
                 Explore Lavish Morocco
-              </Link>
+              </a>
               <Link
-                href="/wealthos"
+                href="/dashboard"
                 className="px-8 py-4 rounded-lg border border-gold-500/30 text-gold-400 font-semibold hover:bg-gold-500/5 transition-all duration-300"
               >
-                Access WealthOS Dashboard
+                Access Atlas Wealth Dashboard
               </Link>
             </div>
           </motion.div>
