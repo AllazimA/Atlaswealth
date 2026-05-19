@@ -157,50 +157,6 @@ input:focus, textarea:focus {
   box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.1);
 }
 
-/* ─── WealthOS dark theme isolation ─────────────────────────── */
-html:not(.dark) [data-wealthos] {
-  background-color: #111318;
-  color: white;
-  color-scheme: dark;
-}
-html:not(.dark) [data-wealthos] nav {
-  background: #0d0d0d !important;
-  border-bottom-color: rgba(255, 255, 255, 0.05) !important;
-}
-html:not(.dark) [data-wealthos] .text-white {
-  color: white !important;
-}
-html:not(.dark) [data-wealthos] .text-gray-300 {
-  color: #d1d5db !important;
-}
-html:not(.dark) [data-wealthos] .text-gray-400 {
-  color: #9ca3af !important;
-}
-html:not(.dark) [data-wealthos] .text-gray-500 {
-  color: #6b7280 !important;
-}
-html:not(.dark) [data-wealthos] .text-gray-600 {
-  color: #4b5563 !important;
-}
-html:not(.dark) [data-wealthos] [class*="bg-white\/"] {
-  background-color: rgba(255, 255, 255, 0.05) !important;
-}
-html:not(.dark) [data-wealthos] [class*="border-white\/"] {
-  border-color: rgba(255, 255, 255, 0.1) !important;
-}
-html:not(.dark) [data-wealthos] input,
-html:not(.dark) [data-wealthos] select,
-html:not(.dark) [data-wealthos] textarea {
-  color: white !important;
-}
-html:not(.dark) [data-wealthos] input::placeholder {
-  color: #4b5563 !important;
-}
-html:not(.dark) [data-wealthos] input:focus,
-html:not(.dark) [data-wealthos] textarea:focus {
-  box-shadow: none !important;
-}
-
 /* ─── Light mode overrides ──────────────────────────────────── */
 html:not(.dark) body {
   background-color: #f5f3ef;
@@ -265,8 +221,8 @@ html:not(.dark) .bg-gold-500\/5 {
   background-color: rgba(201, 169, 110, 0.08) !important;
 }
 
-/* Navbar */
-html:not(.dark) nav:not(.lavish-root nav):not(.lavish-root *) {
+/* Navbar — exclude WealthOS nav */
+html:not(.dark) nav:not([data-wealthos] nav):not([data-wealthos] *):not(.lavish-root nav):not(.lavish-root *) {
   background: rgba(245, 243, 239, 0.92) !important;
   border-bottom-color: rgba(201, 169, 110, 0.2) !important;
 }
@@ -286,3 +242,31 @@ html:not(.dark) ::-webkit-scrollbar-track {
   pointer-events: none;
   z-index: 0;
 }
+
+/* ─── WealthOS dark theme isolation (MUST stay last) ─────────── */
+html body [data-wealthos] { background-color: #111318 !important; color: white !important; color-scheme: dark; }
+html body [data-wealthos] aside { background-color: #0d0d0d !important; }
+html body [data-wealthos] main { background-color: #111318 !important; }
+html body [data-wealthos] nav { background: transparent !important; }
+
+html body [data-wealthos] .bg-\[\#111318\] { background-color: #111318 !important; }
+html body [data-wealthos] .bg-\[\#1a1f2e\] { background-color: #1a1f2e !important; }
+html body [data-wealthos] .bg-\[\#0d0d0d\] { background-color: #0d0d0d !important; }
+html body [data-wealthos] .bg-\[\#111318\]\/\* { background-color: #111318 !important; }
+
+html body [data-wealthos] .text-white   { color: #ffffff !important; }
+html body [data-wealthos] .text-gray-300 { color: #d1d5db !important; }
+html body [data-wealthos] .text-gray-400 { color: #9ca3af !important; }
+html body [data-wealthos] .text-gray-500 { color: #6b7280 !important; }
+html body [data-wealthos] .text-gray-600 { color: #4b5563 !important; }
+
+html body [data-wealthos] [class*="bg-white\/"]   { background-color: rgba(255,255,255,0.05) !important; }
+html body [data-wealthos] [class*="border-white\/"] { border-color: rgba(255,255,255,0.08) !important; }
+html body [data-wealthos] [class*="hover\:bg-white\/"]  { background-color: transparent !important; }
+
+html body [data-wealthos] input,
+html body [data-wealthos] select,
+html body [data-wealthos] textarea { color: white !important; background-color: #111318 !important; }
+html body [data-wealthos] input::placeholder { color: #4b5563 !important; }
+html body [data-wealthos] input:focus,
+html body [data-wealthos] textarea:focus { box-shadow: none !important; }

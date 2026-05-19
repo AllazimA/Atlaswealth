@@ -1,9 +1,27 @@
 'use client'
 
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import type { WealthData, WealthSettings, IncomeSource, Expense, Account, Investment, Goal, Budget, Transaction } from './types'
 
 const STORAGE_KEY = 'wealthos_data'
+
+// Holding type for individual securities
+export interface Holding {
+  id: string
+  symbol: string
+  name: string
+  quantity: number
+  avgCost: number
+  purchaseDate: string
+  sector?: string
+  industry?: string
+  currentPrice?: number
+  priceSource?: 'twelvedata' | 'coingecko' | 'local' | 'pending'
+  lastPriceUpdate?: string
+  notes?: string
+  createdAt: string
+  updatedAt: string
+}
 
 const defaultSettings: WealthSettings = {
   currency: 'USD',
@@ -48,6 +66,15 @@ interface WealthContextType {
   totalMonthlyExpenses: number
   netBalance: number
   fmt: (n: number) => string
+  // Holdings (individual securities)
+  holdings: Holding[]
+  addHolding: (h: Omit<Holding, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>
+  updateHolding: (id: string, h: Partial<Omit<Holding, 'id' | 'createdAt' | 'updatedAt'>>) => Promise<void>
+  deleteHolding: (id: string) => Promise<void>
+  refreshHoldings: () => Promise<void>
+  holdingsLoading: boolean
+  holdingsError: string | null
+  clearHoldingsError: () => void
 }
 
 const WealthContext = createContext<WealthContextType | null>(null)
@@ -87,9 +114,99 @@ export function WealthProvider({ children }: { children: ReactNode }) {
     return defaultData
   })
 
+  const [holdings, setHoldings] = useState<Holding[]>([])
+  const [holdingsLoading, setHoldingsLoading] = useState(false)
+  const [holdingsError, setHoldingsError] = useState<string | null>(null)
+
+  // Load holdings on mount
+  useEffect(() => {
+    refreshHoldings()
+  }, [])
+
   function save(next: WealthData) {
     setData(next)
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)) } catch {}
+  }
+
+  async function refreshHoldings() {
+    try {
+      setHoldingsLoading(true)
+      setHoldingsError(null)
+      const res = await fetch('/wealthos/api/holdings')
+      if (!res.ok) throw new Error('Failed to load holdings')
+      const { holdings: data } = await res.json()
+      setHoldings(data || [])
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to load holdings'
+      setHoldingsError(message)
+      console.error('Error loading holdings:', message)
+    } finally {
+      setHoldingsLoading(false)
+    }
+  }
+
+  async function addHolding(h: Omit<Holding, 'id' | 'createdAt' | 'updatedAt'>) {
+    try {
+      setHoldingsError(null)
+      const res = await fetch('/wealthos/api/holdings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(h)
+      })
+      if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error.error || 'Failed to add holding')
+      }
+      const { holding } = await res.json()
+      setHoldings(prev => [holding, ...prev])
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to add holding'
+      setHoldingsError(message)
+      throw err
+    }
+  }
+
+  async function updateHolding(id: string, h: Partial<Omit<Holding, 'id' | 'createdAt' | 'updatedAt'>>) {
+    try {
+      setHoldingsError(null)
+      const res = await fetch(`/wealthos/api/holdings/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(h)
+      })
+      if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error.error || 'Failed to update holding')
+      }
+      const { holding } = await res.json()
+      setHoldings(prev => prev.map(x => x.id === id ? holding : x))
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to update holding'
+      setHoldingsError(message)
+      throw err
+    }
+  }
+
+  async function deleteHolding(id: string) {
+    try {
+      setHoldingsError(null)
+      const res = await fetch(`/wealthos/api/holdings/${id}`, {
+        method: 'DELETE'
+      })
+      if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error.error || 'Failed to delete holding')
+      }
+      setHoldings(prev => prev.filter(x => x.id !== id))
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to delete holding'
+      setHoldingsError(message)
+      throw err
+    }
+  }
+
+  function clearHoldingsError() {
+    setHoldingsError(null)
   }
 
   const totalMonthlyIncome = data.incomeSources.reduce(
@@ -145,6 +262,16 @@ export function WealthProvider({ children }: { children: ReactNode }) {
       deleteBudget: (id) => save({ ...data, budgets: data.budgets.filter(x => x.id !== id) }),
 
       updateSettings: (s) => save({ ...data, settings: { ...(data.settings || defaultSettings), ...s } }),
+
+      // Holdings
+      holdings,
+      addHolding,
+      updateHolding,
+      deleteHolding,
+      refreshHoldings,
+      holdingsLoading,
+      holdingsError,
+      clearHoldingsError,
     }}>
       {children}
     </WealthContext.Provider>

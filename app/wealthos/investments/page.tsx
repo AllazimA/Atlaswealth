@@ -215,7 +215,7 @@ export default function InvestmentsPage() {
         </div>
         <button
           onClick={openAdd}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-500 text-white font-semibold hover:bg-indigo-400 transition-colors text-sm"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 text-black font-semibold hover:bg-amber-400 transition-colors text-sm"
         >
           <Plus className="w-4 h-4" /> Add Asset Class
         </button>
@@ -229,8 +229,8 @@ export default function InvestmentsPage() {
             <div className="text-2xl font-bold text-white">{totalValue > 0 ? fmt(totalValue) : '—'}</div>
             <div className="text-gray-500 text-xs mt-1">{totalAllocated.toFixed(1)}% allocated</div>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-indigo-500/10 flex items-center justify-center">
-            <TrendingUp className="w-5 h-5 text-indigo-400" />
+          <div className="w-11 h-11 rounded-xl bg-amber-500/10 flex items-center justify-center">
+            <TrendingUp className="w-5 h-5 text-amber-400" />
           </div>
         </div>
         <div className="bg-[#1a1f2e] rounded-2xl p-5 border border-white/5 flex items-center justify-between">
@@ -239,8 +239,8 @@ export default function InvestmentsPage() {
             <div className="text-2xl font-bold text-white">{investments.length}</div>
             <div className="text-gray-500 text-xs mt-1">{remaining.toFixed(1)}% remaining</div>
           </div>
-          <div className="w-11 h-11 rounded-xl bg-sky-500/10 flex items-center justify-center">
-            <Layers className="w-5 h-5 text-sky-400" />
+          <div className="w-11 h-11 rounded-xl bg-amber-500/10 flex items-center justify-center">
+            <Layers className="w-5 h-5 text-amber-400" />
           </div>
         </div>
         <div className="bg-[#1a1f2e] rounded-2xl p-5 border border-white/5 flex items-center justify-between">
@@ -289,14 +289,14 @@ export default function InvestmentsPage() {
 
       {investments.length === 0 ? (
         <div className="bg-[#1a1f2e] rounded-2xl border border-white/5 flex flex-col items-center justify-center py-24">
-          <div className="w-20 h-20 rounded-full bg-indigo-500/10 flex items-center justify-center mb-5">
-            <Layers className="w-9 h-9 text-indigo-400" />
+          <div className="w-20 h-20 rounded-full bg-amber-500/10 flex items-center justify-center mb-5">
+            <Layers className="w-9 h-9 text-amber-400" />
           </div>
           <div className="text-white font-semibold text-lg mb-2">No asset classes yet</div>
           <div className="text-gray-500 text-sm mb-6 text-center max-w-xs">
             Add your first asset class to start visualizing your portfolio allocation
           </div>
-          <button onClick={openAdd} className="px-5 py-2.5 rounded-xl bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 transition-colors text-sm border border-indigo-500/20" type="button">
+          <button onClick={openAdd} className="px-5 py-2.5 rounded-xl bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition-colors text-sm border border-amber-500/20" type="button">
             + Add First Asset Class
           </button>
         </div>
@@ -313,7 +313,7 @@ export default function InvestmentsPage() {
                       className="h-full rounded-full transition-all duration-500"
                       style={{
                         width: `${Math.min(totalAllocated, 100)}%`,
-                        background: totalAllocated > 100 ? '#fb7185' : totalAllocated >= 90 ? '#fbbf24' : '#818cf8',
+                        background: totalAllocated > 100 ? '#fb7185' : totalAllocated >= 90 ? '#fbbf24' : '#f59e0b',
                       }}
                     />
                   </div>
@@ -479,7 +479,7 @@ export default function InvestmentsPage() {
                     style={{
                       width: `${Math.min(totalAllocated, 100)}%`,
                       background: totalAllocated > 100 ? '#fb7185' : totalAllocated >= 90 ? '#fbbf24'
-                        : 'linear-gradient(90deg,#818cf8,#38bdf8)',
+                        : 'linear-gradient(90deg,#f59e0b,#fbbf24)',
                     }}
                   />
                 </div>
@@ -492,7 +492,7 @@ export default function InvestmentsPage() {
             {/* Diversification score */}
             <div className="bg-[#1a1f2e] rounded-2xl border border-white/5 p-6">
               <h2 className="text-white font-semibold mb-5 flex items-center gap-2">
-                <Award className="w-4 h-4 text-indigo-400" /> Diversification Score
+                <Award className="w-4 h-4 text-amber-400" /> Diversification Score
               </h2>
               <div className="flex items-end gap-4 mb-5">
                 <div>
@@ -529,18 +529,18 @@ export default function InvestmentsPage() {
             {/* Portfolio insights */}
             <div className="bg-[#1a1f2e] rounded-2xl border border-white/5 p-6">
               <h2 className="text-white font-semibold mb-5 flex items-center gap-2">
-                <ChevronRight className="w-4 h-4 text-indigo-400" /> Portfolio Insights
+                <ChevronRight className="w-4 h-4 text-amber-400" /> Portfolio Insights
               </h2>
               <div className="space-y-3">
                 {generateInsights(investments, totalAllocated, score).map((insight, i) => (
                   <div key={i} className={`flex gap-3 p-3 rounded-xl border ${
                     insight.type === 'warn' ? 'bg-amber-500/8 border-amber-500/15' :
                     insight.type === 'error' ? 'bg-rose-500/8 border-rose-500/15' :
-                    'bg-indigo-500/8 border-indigo-500/10'}`}>
+                    'bg-amber-500/8 border-amber-500/10'}`}>
                     <span className="text-base mt-0.5 flex-shrink-0">{insight.icon}</span>
                     <p className={`text-sm leading-relaxed ${
                       insight.type === 'warn' ? 'text-amber-300' :
-                      insight.type === 'error' ? 'text-rose-300' : 'text-indigo-200'
+                      insight.type === 'error' ? 'text-rose-300' : 'text-amber-200'
                     }`}>{insight.text}</p>
                   </div>
                 ))}
@@ -587,7 +587,7 @@ export default function InvestmentsPage() {
                 <input
                   type="number" step="0.1" min="0.1" max="100"
                   className={`w-full bg-[#111318] border rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none pr-10 ${
-                    wouldExceed() ? 'border-rose-500/50' : 'border-white/10 focus:border-indigo-500/50'
+                    wouldExceed() ? 'border-rose-500/50' : 'border-white/10 focus:border-amber-500/50'
                   }`}
                   placeholder="e.g. 25"
                   value={form.allocationPercentage}
@@ -618,7 +618,7 @@ export default function InvestmentsPage() {
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm">$</span>
                 <input
                   type="number" step="any" min="0"
-                  className="w-full bg-[#111318] border border-white/10 rounded-xl pl-8 pr-4 py-2.5 text-white text-sm focus:outline-none focus:border-indigo-500/50"
+                  className="w-full bg-[#111318] border border-white/10 rounded-xl pl-8 pr-4 py-2.5 text-white text-sm focus:outline-none focus:border-amber-500/50"
                   placeholder="0.00"
                   value={form.amount}
                   onChange={e => setForm({ ...form, amount: e.target.value })}
@@ -629,7 +629,7 @@ export default function InvestmentsPage() {
             <div>
               <label className="text-gray-400 text-sm block mb-1.5">Notes <span className="text-gray-600">(optional)</span></label>
               <input
-                className="w-full bg-[#111318] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-indigo-500/50"
+                className="w-full bg-[#111318] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-amber-500/50"
                 placeholder="e.g. Vanguard S&P 500 index"
                 value={form.notes}
                 onChange={e => setForm({ ...form, notes: e.target.value })}
