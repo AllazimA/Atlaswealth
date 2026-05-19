@@ -47,12 +47,6 @@ export default function AtlasWealthNavbar() {
           {/* CTA Buttons */}
           <div className="hidden sm:flex items-center gap-4">
             <Link
-              href="/login"
-              className="text-gold-400 hover:text-gold-300 font-semibold transition-colors"
-            >
-              Login
-            </Link>
-            <Link
               href="/dashboard"
               className="px-6 py-2 rounded-lg bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 font-semibold hover:shadow-lg hover:shadow-gold-500/50 transition-all hover:scale-105"
             >
@@ -88,12 +82,6 @@ export default function AtlasWealthNavbar() {
               </Link>
             ))}
             <div className="flex flex-col gap-2 pt-4 border-t border-gold-500/10">
-              <Link
-                href="/login"
-                className="text-center py-2 text-gold-400 hover:text-gold-300 font-semibold transition-colors"
-              >
-                Login
-              </Link>
               <Link
                 href="/dashboard"
                 className="text-center py-2 rounded-lg bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 font-semibold hover:shadow-lg hover:shadow-gold-500/50 transition-all"
